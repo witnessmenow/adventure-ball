@@ -3,8 +3,11 @@ package com.garbri.proigo.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,8 +23,6 @@ import com.garbri.proigo.core.utilities.TextDisplayHelper;
 import com.garbri.proigo.core.utilities.TimerHelper;
 import com.garbri.proigo.core.vehicles.Car;
 import com.garbri.proigo.core.vehicles.Vehicle;
-
-import com.badlogic.gdx.Screen;
 
 public class Maze1 implements Screen {
 private OrthographicCamera camera;
@@ -114,6 +115,7 @@ private OrthographicCamera camera;
 	
 	private void createAllCars()
 	{
+		
 		Car tempCar;
 		
 		this.vehicles.clear();
@@ -154,19 +156,19 @@ private OrthographicCamera camera;
 	    }
 	    
 	    //checkForReset
-	    if (Gdx.input.isKeyPressed(Input.Keys.F2))
+	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_9))
 	    {
 	    	this.game.setScreen(this.game.soccerScreen);
 	    }
 	    
 	    //checkForPlayerNumberChange to 2
-	    if (Gdx.input.isKeyPressed(Input.Keys.F3))
+	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_2))
 	    {
 	    	this.game.changeNumberPlayers(2, this);
 	    }
 	    
 	    //checkForPlayerNumberChange to 4
-	    if (Gdx.input.isKeyPressed(Input.Keys.F4))
+	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_4))
 	    {
 	    	this.game.changeNumberPlayers(4, this);
 	    }

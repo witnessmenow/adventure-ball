@@ -120,19 +120,19 @@ public class SoccerScreen implements Screen{
 	    }
 	    
 	    //checkForReset
-	    if (Gdx.input.isKeyPressed(Input.Keys.F1))
+	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_9))
 	    {
 	    	this.game.setScreen(this.game.maze1);
 	    }
 	    
 	    //checkForPlayerNumberChange to 2
-	    if (Gdx.input.isKeyPressed(Input.Keys.F3))
+	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_2))
 	    {
 	    	this.game.changeNumberPlayers(2, this);
 	    }
 	    
 	    //checkForPlayerNumberChange to 4
-	    if (Gdx.input.isKeyPressed(Input.Keys.F4))
+	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_4))
 	    {
 	    	this.game.changeNumberPlayers(4, this);
 	    }
