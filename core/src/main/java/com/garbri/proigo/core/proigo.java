@@ -10,6 +10,8 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
 import com.garbri.proigo.core.controls.XboxListener;
+import com.garbri.proigo.core.networking.GameClient;
+import com.garbri.proigo.core.networking.GameServer;
 import com.garbri.proigo.core.objects.Player;
 
 public class proigo extends Game {
@@ -71,6 +73,32 @@ public class proigo extends Game {
 	{
 		createPlayers(numberOfPlayers);
 		setScreen(screen);
+	}
+	
+	public void startServer()
+	{
+		try
+		{
+			GameServer gameServer = new GameServer();
+		}
+		catch (Exception e)
+		{
+			//TODO: Something!
+		}
+			
+			
+	}
+	
+	public void connectToServer()
+	{
+		try
+		{
+			GameClient gameClient = new GameClient();
+		}
+		catch (Exception e)
+		{
+			//TODO: Something!
+		}
 	}
 	
 	private void initilizeControls()
