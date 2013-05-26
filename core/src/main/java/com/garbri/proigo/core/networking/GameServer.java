@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -13,6 +14,7 @@ import com.garbri.proigo.core.networking.Network.ListOfPlayers;
 import com.garbri.proigo.core.networking.Network.Login;
 import com.garbri.proigo.core.networking.Network.PlayerInfo;
 import com.garbri.proigo.core.networking.Network.GameFull;
+import com.garbri.proigo.core.networking.Network.UpdateBall;
 import com.garbri.proigo.core.objects.Player;
 
 
@@ -177,6 +179,13 @@ public class GameServer {
 		{
 			logListOfPlayers("remove");
 		}
+	}
+	
+	public void updateGame(Vector2 ballPosition)
+	{
+		UpdateBall ball = new UpdateBall();
+		ball.position = ballPosition;
+		server.sendToAllTCP(ball);
 	}
 	
 //	void loggedIn (PlayerConnection c, ClientPlayer player) {

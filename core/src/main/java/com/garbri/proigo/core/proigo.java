@@ -18,11 +18,16 @@ public class proigo extends Game {
 	
 	public Maze1 maze1;
 	public SoccerScreen soccerScreen;
+	public NetworkedSoccerScreen networkSoccer;
 	
 	//Number of players;
 	public ArrayList<Player> players;
+	public ArrayList<Player> NetworkPlayers;
 	
 	ArrayList<IControls> controls =  new ArrayList<IControls>();
+	
+	public GameServer gameServer;
+	public GameClient gameClient;
 	
 	@Override
 	public void create() {	
@@ -36,6 +41,7 @@ public class proigo extends Game {
 		
 		maze1 = new Maze1(this);
 		soccerScreen = new SoccerScreen(this);
+		networkSoccer = new NetworkedSoccerScreen(this);
 		
 		this.soccerScreen.ballOffsetX = 0f;
 		
@@ -79,7 +85,7 @@ public class proigo extends Game {
 	{
 		try
 		{
-			GameServer gameServer = new GameServer();
+			this.gameServer = new GameServer();
 		}
 		catch (Exception e)
 		{
@@ -91,14 +97,18 @@ public class proigo extends Game {
 	
 	public void connectToServer()
 	{
+		
+		this.NetworkPlayers = new ArrayList<Player>();
 		try
 		{
-			GameClient gameClient = new GameClient();
+			this.gameClient = new GameClient(this);
 		}
 		catch (Exception e)
 		{
 			//TODO: Something!
 		}
+		
+		setScreen(networkSoccer);
 	}
 	
 	private void initilizeControls()

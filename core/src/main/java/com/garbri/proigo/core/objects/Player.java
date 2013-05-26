@@ -31,5 +31,17 @@ public class Player {
 		
 		return "a";
 	}
+	
+	public void setTeamBasedOnId()
+	{
+		if (this.playerId%2 == 0)
+		{
+			this.playerTeam = Player.team.blue;
+		}
+		else
+		{
+			this.playerTeam = Player.team.red;
+		}
+	}
 
 }

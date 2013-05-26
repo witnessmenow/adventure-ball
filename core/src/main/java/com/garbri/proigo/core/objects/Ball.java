@@ -19,8 +19,18 @@ public class Ball {
 	
 	public Ball(World world, float x, float y, Sprite ballSprite)
 	{
+		createBallObject(world, x, y, ballSprite, false);
+	}
+	
+	public Ball(World world, float x, float y, Sprite ballSprite, boolean networked)
+	{
 		
-	    //Dynamic Body  
+		createBallObject(world, x, y, ballSprite, networked);
+	}
+	
+	private void createBallObject(World world, float x, float y, Sprite ballSprite, boolean networked)
+	{
+		//Dynamic Body  
 	    BodyDef bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
 	    bodyDef.position.set(x, y);  
@@ -56,6 +66,13 @@ public class Ball {
 		
 		
 		this.body.applyForce(this.body.getWorldVector(new Vector2(-(currentVelocity.x*(slowDownMultiplier)), -(currentVelocity.y*(slowDownMultiplier)))), position, true );
+	}
+	
+	public void networkUpdate(Vector2 velocity, Vector2 position)
+	{
+		this.body.setTransform(position, 0);
+		//this.body.
+		
 	}
 	
 	public Vector2 getLocation()
