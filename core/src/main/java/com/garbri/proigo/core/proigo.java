@@ -52,7 +52,7 @@ public class proigo extends Game {
 		
 		for(int i=0; i < numberOfPlayers; i++)
 		{
-			tempPlayer = new Player("Player " + String.valueOf(i+1), this.controls.get(i));
+			tempPlayer = new Player("Player " + String.valueOf(i+1), this.controls.get(i), i);
 			
 			tempPlayer.active = true;
 			

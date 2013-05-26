@@ -1,6 +1,9 @@
 package com.garbri.proigo.core.networking;
 
 import java.io.IOException;
+import java.util.HashMap;
+
+import javax.swing.JOptionPane;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -10,6 +13,7 @@ import com.garbri.proigo.core.networking.Network.Login;
 
 public class GameClient {
 
+	UI ui;
 	Client client;
 	String name;
 	
@@ -34,7 +38,9 @@ public class GameClient {
 		}));
 
 
-		String host = "localhost";
+		ui = new UI();
+
+		String host = ui.inputHost();
 		try {
 			client.connect(5000, host, Network.port);
 			// Server communication after connection can go here, or in Listener#connected().
@@ -42,10 +48,29 @@ public class GameClient {
 			ex.printStackTrace();
 		}
 
-		name = "Client1";
+		name = ui.inputName();
 		Login login = new Login();
 		login.name = name;
 		client.sendTCP(login);
+
+	}
+	
+	static class UI {
+		HashMap<Integer, Character> characters = new HashMap();
+
+		public String inputHost () {
+			String input = (String)JOptionPane.showInputDialog(null, "Host:", "Connect to server", JOptionPane.QUESTION_MESSAGE,
+				null, null, "localhost");
+			if (input == null || input.trim().length() == 0) System.exit(1);
+			return input.trim();
+		}
+
+		public String inputName () {
+			String input = (String)JOptionPane.showInputDialog(null, "Name:", "Connect to server", JOptionPane.QUESTION_MESSAGE,
+				null, null, "Test");
+			if (input == null || input.trim().length() == 0) System.exit(1);
+			return input.trim();
+		}
 
 	}
 	
