@@ -14,6 +14,9 @@ import com.garbri.proigo.core.controls.XboxListener;
 import com.garbri.proigo.core.networking.GameClient;
 import com.garbri.proigo.core.networking.GameServer;
 import com.garbri.proigo.core.objects.Player;
+import com.garbri.proigo.core.screens.NetworkedSoccerScreen;
+import com.garbri.proigo.core.screens.RaceScreen;
+import com.garbri.proigo.core.screens.SoccerScreen;
 
 public class AdventureBall extends Game {
 
@@ -42,14 +45,11 @@ public class AdventureBall extends Game {
         this.soccerScreen.ballOffsetX = 0f;
 
         setScreen(raceScreen);
-
-
     }
 
     private void createPlayers(int numberOfPlayers) {
         this.players = new ArrayList<Player>();
         Player tempPlayer;
-
 
         for (int i = 0; i < numberOfPlayers; i++) {
             tempPlayer = new Player("Player " + String.valueOf(i + 1), this.controls.get(i), i);
@@ -77,8 +77,6 @@ public class AdventureBall extends Game {
         } catch (Exception e) {
             //TODO: Something!
         }
-
-
     }
 
     public void connectToServer() {

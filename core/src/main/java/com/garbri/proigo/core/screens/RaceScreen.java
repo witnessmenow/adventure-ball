@@ -1,4 +1,4 @@
-package com.garbri.proigo.core;
+package com.garbri.proigo.core.screens;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.garbri.proigo.core.AdventureBall;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.ScreenDebug;
 import com.garbri.proigo.core.objects.Ball;

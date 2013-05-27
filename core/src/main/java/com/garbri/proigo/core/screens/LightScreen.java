@@ -1,4 +1,4 @@
-package com.garbri.proigo.core;
+package com.garbri.proigo.core.screens;
 
 import box2dLight.ConeLight;
 import box2dLight.PointLight;
@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.garbri.proigo.core.AdventureBall;
 import com.garbri.proigo.core.controls.ScreenDebug;
 import com.garbri.proigo.core.objects.Ball;
 import com.garbri.proigo.core.utilities.SpriteHelper;

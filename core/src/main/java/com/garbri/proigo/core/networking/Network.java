@@ -39,7 +39,7 @@ public class Network {
 	
 	//This should get returned after a client logs in
 	static public class PlayerInfo {
-		ClientPlayer player;
+		public ClientPlayer player;
 	}
 	
 	static public class ListOfPlayers {

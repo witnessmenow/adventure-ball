@@ -1,4 +1,4 @@
-package com.garbri.proigo.core;
+package com.garbri.proigo.core.screens;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.garbri.proigo.core.AdventureBall;
 import com.garbri.proigo.core.controls.ScreenDebug;
 import com.garbri.proigo.core.objects.Ball;
 import com.garbri.proigo.core.objects.Pitch;
@@ -20,22 +21,14 @@ import com.garbri.proigo.core.utilities.TimerHelper;
 import com.garbri.proigo.core.vehicles.Car;
 import com.garbri.proigo.core.vehicles.Vehicle;
 
-public class SoccerScreen extends ScreenDebug {
+public class NetworkedSoccerScreen extends ScreenDebug {
 
 
     private OrthographicCamera camera;
     private SpriteBatch spriteBatch;
-    /**
-     * This is the main box2d "container" object. All bodies will be loaded in
-     * this object and will be simulated through calls to this object.
-     */
+
     private World world;
-    /**
-     * This box2d debug renderer comes from libgdx test code. It draws lines
-     * over all collision boundaries, so it is immensely useful for verifying
-     * that the world collisions are as you expect them to be. It is, however,
-     * slow, so only use it for testing.
-     */
+
     private Box2DDebugRenderer debugRenderer;
 
     private int screenWidth;
@@ -70,7 +63,9 @@ public class SoccerScreen extends ScreenDebug {
 
     private List<Car> vehicles;
 
-    public SoccerScreen(AdventureBall game) {
+    public Vector2 networkBallPosition;
+
+    public NetworkedSoccerScreen(AdventureBall game) {
         this.game = game;
 
         this.screenWidth = 1400;
@@ -106,6 +101,8 @@ public class SoccerScreen extends ScreenDebug {
 
         this.timer.progressTime();
 
+        this.checkDebugInput(game);
+
         spriteBatch.setProjectionMatrix(camera.combined);
 
         if (this.timer.countDownTimer == 0) {
@@ -114,6 +111,7 @@ public class SoccerScreen extends ScreenDebug {
             }
         }
 
+        this.ball.networkUpdate(null, this.networkBallPosition);
         this.ball.update();
 
         Vector2 ballLocation = this.ball.getLocation();
@@ -172,10 +170,6 @@ public class SoccerScreen extends ScreenDebug {
 
         this.spriteBatch.end();
 
-        if (this.game.gameServer != null) {
-            this.game.gameServer.updateGame(this.ball.body.getPosition());
-        }
-
         /**
          * Draw this last, so we can see the collision boundaries on top of the
          * sprites and map.
@@ -191,7 +185,7 @@ public class SoccerScreen extends ScreenDebug {
 
         world = new World(new Vector2(0.0f, 0.0f), true);
         this.pitch = new Pitch(world, worldWidth, worldHeight, center);
-        this.ball = new Ball(world, center.x + this.ballOffsetX, center.y, spriteHelper.getBallSprite());
+        this.ball = new Ball(world, center.x + this.ballOffsetX, center.y, spriteHelper.getBallSprite(), true);
 
         createAllCars();
 
@@ -235,6 +229,4 @@ public class SoccerScreen extends ScreenDebug {
             this.vehicles.add(tempCar);
         }
     }
-
-
 }
