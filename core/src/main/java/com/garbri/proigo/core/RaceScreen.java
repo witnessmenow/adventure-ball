@@ -3,11 +3,7 @@ package com.garbri.proigo.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import box2dLight.RayHandler;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.garbri.proigo.core.controls.IControls;
+import com.garbri.proigo.core.controls.ScreenDebug;
 import com.garbri.proigo.core.objects.Ball;
 import com.garbri.proigo.core.objects.Maze;
 import com.garbri.proigo.core.utilities.SpriteHelper;
@@ -24,7 +21,7 @@ import com.garbri.proigo.core.utilities.TimerHelper;
 import com.garbri.proigo.core.vehicles.Car;
 import com.garbri.proigo.core.vehicles.Vehicle;
 
-public class Maze1 implements Screen {
+public class RaceScreen extends ScreenDebug {
 private OrthographicCamera camera;
 	private SpriteBatch spriteBatch;
 	/**
@@ -63,13 +60,13 @@ private OrthographicCamera camera;
 	private Boolean displayWinMessage;
 	private String winMessage;
 	
-	private proigo game;
+	private AdventureBall game;
 	
 	private TimerHelper timer;
 	
 	private List<Car> vehicles;
 	
-	public Maze1(proigo game)
+	public RaceScreen(AdventureBall game)
 	{
 		this.game = game;
 		
@@ -93,7 +90,8 @@ private OrthographicCamera camera;
 		this.vehicles = new ArrayList<Car>();
 	}
 
-	private void resetGame()
+    @Override
+	protected void resetGame()
 	{
 		dispose();
 		spriteBatch = new SpriteBatch();
@@ -112,6 +110,7 @@ private OrthographicCamera camera;
 		
 	    createAllCars();
 	}
+
 	
 	private void createAllCars()
 	{
@@ -139,7 +138,9 @@ private OrthographicCamera camera;
 	}
 
 	@Override
-	public void render(float delta) {	
+	public void render(float delta) {
+        this.checkDebugInput(this.game);
+
 	    Gdx.gl.glClearColor(0, 0f, 0f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -148,44 +149,6 @@ private OrthographicCamera camera;
 		
 	    // tell the camera to update its matrices.
 	    camera.update();
-	    
-	    //checkForReset
-	    if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
-	    {
-	    	resetGame();
-	    }
-	    
-	    //checkForReset
-	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_9))
-	    {
-	    	this.game.setScreen(this.game.soccerScreen);
-	    }
-	    
-	    //checkForPlayerNumberChange to 2
-	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_2))
-	    {
-	    	this.game.changeNumberPlayers(2, this);
-	    }
-	    
-	    //checkForPlayerNumberChange to 4
-	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_4))
-	    {
-	    	this.game.changeNumberPlayers(4, this);
-	    }
-	    
-	    //start a server
-	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_5))
-	    {
-	    	this.game.startServer();
-	    }
-	    
-	    //start a server
-	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_6))
-	    {
-	    	this.game.connectToServer();
-	    }
-	    
-	    
 	    
 		spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -283,20 +246,6 @@ private OrthographicCamera camera;
 	}
 
 	@Override
-	public void resize(int width, int height) {
-	}
-
-	@Override
-	public void pause() {
-	}
-
-	@Override
-	public void resume() {
-	}
-
-
-
-	@Override
 	public void show() {
 		
 
@@ -322,9 +271,5 @@ private OrthographicCamera camera;
 	}
 
 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
+
 }

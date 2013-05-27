@@ -1,6 +1,8 @@
 #################
 ## Eclipse
 #################
+*.iml
+*.xml
 *.pydevproject
 .project
 .metadata
@@ -15,6 +17,7 @@ gen/
 local.properties
 .classpath
 .settings/
+.idea/
 .loadpath
 .class
 

@@ -9,7 +9,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
-import com.garbri.proigo.core.proigo;
+import com.garbri.proigo.core.AdventureBall;
 import com.garbri.proigo.core.networking.Network.ListOfPlayers;
 import com.garbri.proigo.core.networking.Network.Login;
 import com.garbri.proigo.core.networking.Network.PlayerInfo;
@@ -21,9 +21,9 @@ public class GameClient {
 	UI ui;
 	Client client;
 	String name;
-	private proigo gameObj;
+	private AdventureBall gameObj;
 	
-	public GameClient (proigo game) {
+	public GameClient (AdventureBall game) {
 		client = new Client();
 		client.start();
 		
@@ -54,7 +54,7 @@ public class GameClient {
 				if (object instanceof UpdateBall) {
 					
 					UpdateBall ball = (UpdateBall)object;
-					gameObj.networkSoccer.networkBallPosition = ball.position;
+					gameObj.networkedSoccerScreen.networkBallPosition = ball.position;
 					return;
 				}
 

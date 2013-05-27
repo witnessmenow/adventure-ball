@@ -1,6 +1,6 @@
 package com.garbri.proigo.java;
 
-import com.garbri.proigo.core.proigo;
+import com.garbri.proigo.core.AdventureBall;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -11,6 +11,6 @@ public class proigoDesktop {
 		config.useGL20 = true;
 		config.width = 1024;
 		config.height = 800;
-		new LwjglApplication(new proigo(), config);
+		new LwjglApplication(new AdventureBall(), config);
 	}
 }
