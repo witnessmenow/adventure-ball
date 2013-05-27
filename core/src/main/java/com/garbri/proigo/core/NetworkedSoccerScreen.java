@@ -27,7 +27,7 @@ import com.garbri.proigo.core.utilities.TimerHelper;
 import com.garbri.proigo.core.vehicles.Car;
 import com.garbri.proigo.core.vehicles.Vehicle;
 
-public class SoccerScreen implements Screen{
+public class NetworkedSoccerScreen implements Screen{
 
 	
 	private OrthographicCamera camera;
@@ -77,7 +77,9 @@ public class SoccerScreen implements Screen{
 	
 	private List<Car> vehicles;
 	
-	public SoccerScreen(proigo game)
+	public Vector2 networkBallPosition;
+	
+	public NetworkedSoccerScreen(proigo game)
 	{
 		this.game = game;
 		
@@ -136,12 +138,6 @@ public class SoccerScreen implements Screen{
 	    {
 	    	this.game.changeNumberPlayers(4, this);
 	    }
-	    
-	    //start a server
-	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_5))
-	    {
-	    	this.game.startServer();
-	    }
 
 		spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -153,6 +149,7 @@ public class SoccerScreen implements Screen{
 			}
 		}
 		
+		this.ball.networkUpdate(null, this.networkBallPosition);
 		this.ball.update();
 
 		Vector2 ballLocation = this.ball.getLocation();
@@ -218,11 +215,6 @@ public class SoccerScreen implements Screen{
 
 		this.spriteBatch.end();
 		
-		if(this.game.gameServer != null)
-		{
-			this.game.gameServer.updateGame(this.ball.body.getPosition());
-		}
-		
 		/**
 		 * Draw this last, so we can see the collision boundaries on top of the
 		 * sprites and map.
@@ -246,7 +238,7 @@ public class SoccerScreen implements Screen{
 		
 		world = new World(new Vector2(0.0f, 0.0f), true);
 		this.pitch = new Pitch(world, worldWidth, worldHeight, center);
-		this.ball = new Ball(world, center.x + this.ballOffsetX, center.y, spriteHelper.getBallSprite());
+		this.ball = new Ball(world, center.x + this.ballOffsetX, center.y, spriteHelper.getBallSprite(), true);
 
 		createAllCars();
 

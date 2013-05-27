@@ -173,6 +173,20 @@ private OrthographicCamera camera;
 	    	this.game.changeNumberPlayers(4, this);
 	    }
 	    
+	    //start a server
+	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_5))
+	    {
+	    	this.game.startServer();
+	    }
+	    
+	    //start a server
+	    if (Gdx.input.isKeyPressed(Input.Keys.NUM_6))
+	    {
+	    	this.game.connectToServer();
+	    }
+	    
+	    
+	    
 		spriteBatch.setProjectionMatrix(camera.combined);
 
 		this.spriteBatch.begin();

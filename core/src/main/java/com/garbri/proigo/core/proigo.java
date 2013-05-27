@@ -10,17 +10,24 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
 import com.garbri.proigo.core.controls.XboxListener;
+import com.garbri.proigo.core.networking.GameClient;
+import com.garbri.proigo.core.networking.GameServer;
 import com.garbri.proigo.core.objects.Player;
 
 public class proigo extends Game {
 	
 	public Maze1 maze1;
 	public SoccerScreen soccerScreen;
+	public NetworkedSoccerScreen networkSoccer;
 	
 	//Number of players;
 	public ArrayList<Player> players;
+	public ArrayList<Player> NetworkPlayers;
 	
 	ArrayList<IControls> controls =  new ArrayList<IControls>();
+	
+	public GameServer gameServer;
+	public GameClient gameClient;
 	
 	@Override
 	public void create() {	
@@ -34,6 +41,7 @@ public class proigo extends Game {
 		
 		maze1 = new Maze1(this);
 		soccerScreen = new SoccerScreen(this);
+		networkSoccer = new NetworkedSoccerScreen(this);
 		
 		this.soccerScreen.ballOffsetX = 0f;
 		
@@ -50,7 +58,7 @@ public class proigo extends Game {
 		
 		for(int i=0; i < numberOfPlayers; i++)
 		{
-			tempPlayer = new Player("Player " + String.valueOf(i+1), this.controls.get(i));
+			tempPlayer = new Player("Player " + String.valueOf(i+1), this.controls.get(i), i);
 			
 			tempPlayer.active = true;
 			
@@ -71,6 +79,36 @@ public class proigo extends Game {
 	{
 		createPlayers(numberOfPlayers);
 		setScreen(screen);
+	}
+	
+	public void startServer()
+	{
+		try
+		{
+			this.gameServer = new GameServer();
+		}
+		catch (Exception e)
+		{
+			//TODO: Something!
+		}
+			
+			
+	}
+	
+	public void connectToServer()
+	{
+		
+		this.NetworkPlayers = new ArrayList<Player>();
+		try
+		{
+			this.gameClient = new GameClient(this);
+		}
+		catch (Exception e)
+		{
+			//TODO: Something!
+		}
+		
+		setScreen(networkSoccer);
 	}
 	
 	private void initilizeControls()
