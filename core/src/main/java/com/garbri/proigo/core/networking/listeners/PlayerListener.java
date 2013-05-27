@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.garbri.proigo.core.networking.ClientPlayer;
 import com.garbri.proigo.core.networking.Network;
+import com.garbri.proigo.core.networking.server.GameServer;
 
 import java.util.List;
 
@@ -18,23 +19,22 @@ import java.util.List;
  */
 public class PlayerListener extends Listener {
     private Boolean DEBUG_LOGGING = true;
-    private Boolean[] idPool;
-    private Integer maxPlayers;
     private List<ClientPlayer> players;
     private Server server;
+    private GameServer gameServer;
 
-    public PlayerListener(Server server, Boolean[] idPool, Integer maxPlayers, List<ClientPlayer> players) {
-        this.idPool = idPool;
-        this.maxPlayers = maxPlayers;
+    public PlayerListener(Server server, List<ClientPlayer> players, GameServer gameServer) {
+
         this.players = players;
         this.server = server;
+        this.gameServer = gameServer;
 
     }
 
     @Override
     public void received(Connection c, Object object) {
         // We know all connections for this server are actually CharacterConnections.
-        PlayerConnection connection = (PlayerConnection) c;
+    	GameServer.PlayerConnection connection = (GameServer.PlayerConnection) c;
         ClientPlayer player = connection.player;
 
         if (object instanceof Network.Login) {
@@ -55,7 +55,7 @@ public class PlayerListener extends Listener {
             player = new ClientPlayer();
 
             player.name = name;
-            player.playerId = getNewPlayerID();
+            //player.playerId = getNewPlayerID();
 
             if (player.playerId == -1) {
                 c.sendTCP(new Network.GameFull());
@@ -97,7 +97,7 @@ public class PlayerListener extends Listener {
 
     @Override
     public void disconnected(Connection c) {
-        PlayerConnection connection = (PlayerConnection) c;
+    	GameServer.PlayerConnection connection = (GameServer.PlayerConnection) c;
         if (connection.player != null) {
 
             Gdx.app.log("Netowrking-Server", "Got a Disconnect from: (name:" + connection.player.name + ", id:" + connection.player.playerId + ")");
@@ -105,16 +105,12 @@ public class PlayerListener extends Listener {
         }
     }
 
-    // This holds per connection state.
-    static class PlayerConnection extends Connection {
-        public ClientPlayer player;
-    }
 
     private int getNewPlayerID() {
-        for (int i = 0; i < this.maxPlayers; i++) {
+        for (int i = 0; i < gameServer.idPool.length ; i++) {
             //IF false, it is a free id
-            if (!idPool[i]) {
-                idPool[i] = true;
+            if (!gameServer.idPool[i]) {
+            	gameServer.idPool[i] = true;
                 return i;
             }
         }

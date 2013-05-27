@@ -18,7 +18,7 @@ public class GameServer {
 	private static boolean DEBUG_LOGGING = true;
 
 	private static int MAX_PLAYERS=2;
-	private Boolean[] idPool;
+	public Boolean[] idPool;
 
 	private List<ClientPlayer> players;
 
@@ -41,7 +41,7 @@ public class GameServer {
 		// registered by the same method for both the client and server.
 		Network.register(server);
 
-		server.addListener(new PlayerListener(server,this.idPool,MAX_PLAYERS,this.players));
+		server.addListener(new PlayerListener(server,this.players, this));
 
 		server.bind(Network.port);
 		server.start();
@@ -70,7 +70,7 @@ public class GameServer {
 
 
 	// This holds per connection state.
-	static class PlayerConnection extends Connection {
+	public static class PlayerConnection extends Connection {
 		public ClientPlayer player;
 	}
     public void updateGame(Vector2 ballPosition)
