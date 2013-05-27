@@ -5,7 +5,6 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import com.garbri.proigo.core.objects.Player;
 
 public class Network {
 	static public final int port = 54555;

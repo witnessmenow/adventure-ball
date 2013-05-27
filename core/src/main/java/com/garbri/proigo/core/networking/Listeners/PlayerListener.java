@@ -1,4 +1,4 @@
-package com.garbri.proigo.core.networking.Listeners;
+package com.garbri.proigo.core.networking.listeners;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
@@ -84,9 +84,14 @@ public class PlayerListener extends Listener {
     }
 
     private boolean isValid(String value) {
-        if (value == null) return false;
+        if (value == null) {
+            return false;
+        }
         value = value.trim();
-        if (value.length() == 0) return false;
+
+        if (value.length() == 0) {
+            return false;
+        }
         return true;
     }
 
@@ -124,9 +129,9 @@ public class PlayerListener extends Listener {
 
         sendPlayerListToAll();
 
-        //if (DEBUG_LOGGING) {
-        //    logListOfPlayers("add");
-        //}
+        if (DEBUG_LOGGING) {
+            logListOfPlayers("add");
+        }
     }
 
     private void sendPlayerListToAll() {

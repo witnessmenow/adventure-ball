@@ -1,16 +1,17 @@
-package com.garbri.proigo.core.networking;
+package com.garbri.proigo.core.networking.server;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
+import com.garbri.proigo.core.networking.ClientPlayer;
+import com.garbri.proigo.core.networking.Network;
 import com.garbri.proigo.core.networking.Network.UpdateBall;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
-import com.garbri.proigo.core.networking.Listeners.PlayerListener;
+import com.garbri.proigo.core.networking.listeners.PlayerListener;
 
 public class GameServer {
 
