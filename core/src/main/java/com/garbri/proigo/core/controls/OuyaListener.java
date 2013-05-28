@@ -1,16 +1,23 @@
 package com.garbri.proigo.core.controls;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.math.Vector3;
 
-public class XboxListener implements ControllerListener {
+public class OuyaListener implements ControllerListener{
+	
 	GamePadControls controls = new GamePadControls();
 	
 	public GamePadControls getControls() {
+		Gdx.app.log("OuyaListener", "GetControls - return controls");
 		return controls;
 	}
+	
+	private int brakeButton = 97;
+	private int accelerateButton = Ouya.BUTTON_O;
 
 	public void setControls(GamePadControls controls) {
 		this.controls = controls;
@@ -24,11 +31,11 @@ public class XboxListener implements ControllerListener {
 
 	@Override
 	public boolean axisMoved(Controller arg0, int arg1, float arg2) {
-		if(arg1 == 1){
-			if(arg2 < -0.2){
+		if(arg1 == Ouya.AXIS_LEFT_X){
+			if(arg2 < -0.15){
 				controls.left = true;
 				controls.right = false;
-			} else if(arg2 > 0.2){
+			} else if(arg2 > 0.15){
 				controls.left = false;
 				controls.right = true;
 			} else{
@@ -42,9 +49,14 @@ public class XboxListener implements ControllerListener {
 
 	@Override
 	public boolean buttonDown(Controller arg0, int buttonCode) {
-		if(buttonCode == 0){
+		
+		Gdx.app.log("OuyaListener", "ButtonCode: " + String.valueOf(buttonCode));
+		
+		if(buttonCode == accelerateButton){
 		controls.accelerate  = true;}
-		else if (buttonCode == 1){
+		else if (buttonCode == brakeButton){
+			//Looking at the Java file on Github for The Ouya class Ouya.Button_A should be 97, and this is what the UI is sending when the a button is pressed
+			//but from testing it seems that Ouya.Button_A is set to 99
 			controls.brake = true;
 		}
 		
@@ -53,9 +65,9 @@ public class XboxListener implements ControllerListener {
 
 	@Override
 	public boolean buttonUp(Controller arg0, int buttonCode) {
-		if(buttonCode == 0){
+		if(buttonCode == accelerateButton){
 			controls.accelerate  = false;}
-			else if (buttonCode == 1){
+			else if (buttonCode == brakeButton){
 				controls.brake = false;
 			}
 		return true;

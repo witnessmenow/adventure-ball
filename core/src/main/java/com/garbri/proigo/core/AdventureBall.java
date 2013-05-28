@@ -8,8 +8,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
+import com.garbri.proigo.core.controls.OuyaListener;
 import com.garbri.proigo.core.controls.XboxListener;
 import com.garbri.proigo.core.networking.client.GameClient;
 import com.garbri.proigo.core.networking.server.GameServer;
@@ -94,10 +96,21 @@ public class AdventureBall extends Game {
     private void initilizeControls() {
         for (Controller controller : Controllers.getControllers()) {
             Gdx.app.log("Main", controller.getName());
-            XboxListener listener = new XboxListener();
-            controller.addListener(listener);
-            listener.getControls();
-            controls.add(listener.getControls());
+            if(Ouya.ID.equals(controller.getName()))
+            {
+            	OuyaListener listener = new OuyaListener();
+                controller.addListener(listener);
+                //listener.getControls();
+                controls.add(listener.getControls());
+            }
+            else
+            {
+            	XboxListener listener = new XboxListener();
+                controller.addListener(listener);
+                //listener.getControls();
+                controls.add(listener.getControls());
+            }
+            
 
         }
 

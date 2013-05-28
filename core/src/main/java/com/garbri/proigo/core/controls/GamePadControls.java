@@ -1,6 +1,6 @@
 package com.garbri.proigo.core.controls;
 
-public class XboxControls implements IControls{
+public class GamePadControls implements IControls{
 	Boolean left = false;
 	Boolean right = false;
 	Boolean accelerate = false;

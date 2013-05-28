@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.garbri.proigo.core.controls.KeyboardControls;
-import com.garbri.proigo.core.controls.XboxControls;
+import com.garbri.proigo.core.controls.GamePadControls;
 import com.garbri.proigo.core.objects.Player;
 import com.garbri.proigo.core.objects.Wheel;
 import com.garbri.proigo.core.utilities.SpriteHelper;
@@ -53,7 +53,7 @@ public class Vehicle {
 		return this.body.getLocalVector(this.body.getLinearVelocityFromLocalPoint(new Vector2(0, 0)));
 	}
 	
-	private void xboxControlRead(XboxControls xboxcontrols)
+	private void xboxControlRead(GamePadControls xboxcontrols)
 	{
 		//Read Acceleration/Braking
 		if (xboxcontrols.getAccelerate())
@@ -91,9 +91,9 @@ public class Vehicle {
 	
 	public void controlVehicle()
 	{
-		if(this.player.controls instanceof XboxControls)
+		if(this.player.controls instanceof GamePadControls)
 		{
-			xboxControlRead((XboxControls)this.player.controls);
+			xboxControlRead((GamePadControls)this.player.controls);
 		}	
 		else if (this.player.controls instanceof KeyboardControls)
 		{
