@@ -11,6 +11,14 @@
 	<artifactId>proigo-android</artifactId>
 	<packaging>apk</packaging>
 	<name>proigo Android</name>
+	
+		<repositories>
+    	<repository>
+      		<id>in-project</id>
+      		<name>In Project Repo</name>
+      		<url>file://${project.basedir}/lib</url>
+    	</repository>
+    </repositories>
 
 	<dependencies>
 		<dependency>
@@ -45,6 +53,12 @@
 			<artifactId>android</artifactId>
 			<version>${android.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		
+		 <dependency>
+			<groupId>extensions</groupId>
+			<artifactId>gdx-controllers-android</artifactId>
+			<version>0.9.8</version>
 		</dependency>
 	</dependencies>
 

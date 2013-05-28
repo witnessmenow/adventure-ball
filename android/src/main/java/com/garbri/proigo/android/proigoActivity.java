@@ -1,6 +1,6 @@
 package com.garbri.proigo.android;
 
-import com.garbri.proigo.core.proigo;
+import com.garbri.proigo.core.AdventureBall;
 
 import android.os.Bundle;
 
@@ -14,6 +14,6 @@ public class proigoActivity extends AndroidApplication {
        super.onCreate(savedInstanceState);
        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
        config.useGL20 = true;
-       initialize(new proigo(), config);
+       initialize(new AdventureBall(), config);
    }
 }

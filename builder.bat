@@ -9,6 +9,7 @@ echo 1. Build Desktop Application
 echo 2. Run Desktop Application
 echo 3. Package HTML Application
 echo 4. Build and Package Desktop app for Sharing
+echo 5. Build Android
 echo 8. Maven Clean
 ECHO -------------------------------------
 set INPUT=
@@ -18,6 +19,7 @@ IF /I '%INPUT%'=='1' GOTO BuildDesktop
 IF /I '%INPUT%'=='2' GOTO runDesktop
 IF /I '%INPUT%'=='3' GOTO buildHtml
 IF /I '%INPUT%'=='4' GOTO package
+IF /I '%INPUT%'=='5' GOTO Android
 IF /I '%INPUT%'=='8' GOTO MavenClean
 
 ECHO ============INVALID INPUT============
@@ -28,6 +30,11 @@ ECHO -------------------------------------
 ECHO ======PRESS ANY KEY TO CONTINUE======
 
 PAUSE > NUL
+GOTO start
+
+:Android
+call %M2%/mvn -Pandroid install
+pause
 GOTO start
 
 :BuildDesktop
