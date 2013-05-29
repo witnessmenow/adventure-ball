@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -140,7 +141,12 @@ private OrthographicCamera camera;
 
 	@Override
 	public void render(float delta) {
-        this.checkDebugInput(this.game);
+        //this.checkDebugInput(this.game);
+		
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+        {
+            this.game.setScreen(this.game.mainMenu);
+        }
 
 	    Gdx.gl.glClearColor(0, 0f, 0f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -249,6 +255,7 @@ private OrthographicCamera camera;
 	@Override
 	public void show() {
 		
+		this.game.activeScreen = this;
 
 		//Leaving this here since creating a new world everytime we load might not be a bad idea from a clean up perspictive
 		this.world = new World(new Vector2(0.0f, 0.0f), true);

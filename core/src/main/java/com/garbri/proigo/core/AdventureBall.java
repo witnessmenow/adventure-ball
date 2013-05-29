@@ -16,6 +16,7 @@ import com.garbri.proigo.core.controls.XboxListener;
 import com.garbri.proigo.core.networking.client.GameClient;
 import com.garbri.proigo.core.networking.server.GameServer;
 import com.garbri.proigo.core.objects.Player;
+import com.garbri.proigo.core.screens.PauseMenuScreen;
 import com.garbri.proigo.core.screens.NetworkedSoccerScreen;
 import com.garbri.proigo.core.screens.RaceScreen;
 import com.garbri.proigo.core.screens.SoccerScreen;
@@ -25,6 +26,7 @@ public class AdventureBall extends Game {
     public RaceScreen raceScreen;
     public SoccerScreen soccerScreen;
     public NetworkedSoccerScreen networkedSoccerScreen;
+    public PauseMenuScreen mainMenu;
 
     //Number of players;
     public ArrayList<Player> players;
@@ -34,6 +36,8 @@ public class AdventureBall extends Game {
 
     public GameServer gameServer;
     public GameClient gameClient;
+    
+    public Screen activeScreen;
 
     @Override
     public void create() {
@@ -44,6 +48,7 @@ public class AdventureBall extends Game {
         raceScreen = new RaceScreen(this);
         soccerScreen = new SoccerScreen(this);
         networkedSoccerScreen = new NetworkedSoccerScreen(this);
+        mainMenu = new PauseMenuScreen(this);
         this.soccerScreen.ballOffsetX = 0f;
 
         setScreen(raceScreen);

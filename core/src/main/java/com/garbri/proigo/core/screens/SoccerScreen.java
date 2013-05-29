@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -98,7 +99,13 @@ public class SoccerScreen extends ScreenDebug {
 
     @Override
     public void render(float delta) {
-        this.checkDebugInput(this.game);
+        //this.checkDebugInput(this.game);
+    	
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+        {
+            this.game.setScreen(this.game.mainMenu);
+        }
+    	
         Gdx.gl.glClearColor(0, 0.5f, 0.05f, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -187,6 +194,8 @@ public class SoccerScreen extends ScreenDebug {
 
     @Override
     public void show() {
+    	
+    	this.game.activeScreen = this;
 
         spriteBatch = new SpriteBatch();
 
