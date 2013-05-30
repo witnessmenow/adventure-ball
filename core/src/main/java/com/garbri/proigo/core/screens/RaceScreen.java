@@ -123,7 +123,8 @@ private OrthographicCamera camera;
 		
 		for( int i = 0; i < this.game.players.size(); i++)
 		{
-			tempCar = new Car(	this.game.players.get(i), 
+			tempCar = new Car(	this.game.players.get(i).controls,
+            					this.game.players.get(i), 
 								this.world, 
 								this.maze.getPlayerStartPoint(i), 
 								this.maze.getPlayerStartAngle(i),

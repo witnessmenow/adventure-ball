@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
 import com.garbri.proigo.core.controls.GamePadControls;
 import com.garbri.proigo.core.objects.Player;
@@ -24,6 +25,7 @@ public class Vehicle {
 	public Vector2 position;
 	public List<Wheel> wheels;
 	
+	public IControls controls;
 	public Player player;
 	
 	public static final int STEER_NONE=0;
@@ -91,13 +93,13 @@ public class Vehicle {
 	
 	public void controlVehicle()
 	{
-		if(this.player.controls instanceof GamePadControls)
+		if(this.controls instanceof GamePadControls)
 		{
-			ControlPadRead((GamePadControls)this.player.controls);
+			ControlPadRead((GamePadControls)this.controls);
 		}	
-		else if (this.player.controls instanceof KeyboardControls)
+		else if (this.controls instanceof KeyboardControls)
 		{
-			keyboardControlRead((KeyboardControls)this.player.controls); 
+			keyboardControlRead((KeyboardControls)this.controls); 
 
 		}
 		this.update(Gdx.app.getGraphics().getDeltaTime());

@@ -90,7 +90,7 @@ public class SoccerScreen extends ScreenDebug {
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, this.screenWidth, this.screenHeight);
 
-        this.debugRenderer = new Box2DDebugRenderer();
+        //this.debugRenderer = new Box2DDebugRenderer();
 
         this.pitchSprite = spriteHelper.getPitchSprite(screenWidth, screenHeight);
 
@@ -237,7 +237,8 @@ public class SoccerScreen extends ScreenDebug {
         this.vehicles.clear();
 
         for (int i = 0; i < this.game.players.size(); i++) {
-            tempCar = new Car(this.game.players.get(i),
+            tempCar = new Car(this.game.players.get(i).controls,
+            		this.game.players.get(i),
                     this.world,
                     this.pitch.getTeamStartPoint(this.game.players.get(i).playerTeam, i),
                     this.pitch.getTeamStartAngle(this.game.players.get(i).playerTeam),

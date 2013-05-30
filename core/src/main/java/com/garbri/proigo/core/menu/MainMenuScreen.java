@@ -153,7 +153,7 @@ public class MainMenuScreen implements Screen{
 		
 		if(selectedOption.equals(MenuOptionConstants.startGame))
 		{
-			this.game.setScreen(this.game.raceScreen);
+			this.game.setScreen(this.game.controllerSelectScreen);
 		}
 		else if(selectedOption.equals(MenuOptionConstants.configureControllers))
 		{
@@ -163,7 +163,7 @@ public class MainMenuScreen implements Screen{
 		// TODO Auto-generated method stub
 		
 		
-		this.game.setScreen(this.game.activeScreen);
+		//this.game.setScreen(this.game.activeScreen);
 	}
 
 	@Override

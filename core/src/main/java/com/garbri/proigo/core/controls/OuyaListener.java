@@ -16,9 +16,11 @@ public class OuyaListener implements ControllerListener{
 		return controls;
 	}
 	
+	private final float DeadZone = 0.2f;
+	
 	//Looking at the Java file on Github for The Ouya class Ouya.Button_A should be 97, and this is what the UI is sending when the a button is pressed
 	//but from testing it seems that Ouya.Button_A is set to 99
-	private int brakeButton = 97;
+	private int brakeButton = Ouya.BUTTON_A;
 	private int accelerateButton = Ouya.BUTTON_O;
 	private int startButton = 82; //OUYA BUTTON in middle of controller
 
@@ -35,10 +37,10 @@ public class OuyaListener implements ControllerListener{
 	@Override
 	public boolean axisMoved(Controller arg0, int arg1, float arg2) {
 		if(arg1 == Ouya.AXIS_LEFT_X){
-			if(arg2 < -0.15){
+			if(arg2 < (-1)*DeadZone){
 				controls.left = true;
 				controls.right = false;
-			} else if(arg2 > 0.15){
+			} else if(arg2 > DeadZone){
 				controls.left = false;
 				controls.right = true;
 			} else{
@@ -47,10 +49,10 @@ public class OuyaListener implements ControllerListener{
 			}
 		}
 		else if (arg1 == Ouya.AXIS_LEFT_Y){
-			if(arg2 > 0.15){
+			if(arg2 > DeadZone){
 				controls.down = true;
 				controls.up = false;
-			} else if(arg2 < -0.15){
+			} else if(arg2 < (-1)*DeadZone){
 				controls.down = false;
 				controls.up = true;
 			} else{

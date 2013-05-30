@@ -113,7 +113,8 @@ public class LightScreen extends ScreenDebug {
 
         this.ball = new Ball(world, width / 2, height / 2, this.spriteHelper.getBallSprite());
 
-        this.car = new Car(this.game.players.get(0), world, new Vector2(40, 20), 180, this.spriteHelper.getCarSprite(1), this.spriteHelper.getWheelSprite());
+        this.car = new Car(this.game.players.get(0).controls,
+        		this.game.players.get(0), world, new Vector2(40, 20), 180, this.spriteHelper.getCarSprite(1), this.spriteHelper.getWheelSprite());
 
 
     }

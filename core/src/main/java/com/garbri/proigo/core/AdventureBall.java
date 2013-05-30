@@ -19,6 +19,7 @@ import com.garbri.proigo.core.menu.PauseMenuScreen;
 import com.garbri.proigo.core.networking.client.GameClient;
 import com.garbri.proigo.core.networking.server.GameServer;
 import com.garbri.proigo.core.objects.Player;
+import com.garbri.proigo.core.screens.TeamSelectScreen;
 import com.garbri.proigo.core.screens.NetworkedSoccerScreen;
 import com.garbri.proigo.core.screens.RaceScreen;
 import com.garbri.proigo.core.screens.SoccerScreen;
@@ -28,6 +29,8 @@ public class AdventureBall extends Game {
     public RaceScreen raceScreen;
     public SoccerScreen soccerScreen;
     public NetworkedSoccerScreen networkedSoccerScreen;
+    
+    public TeamSelectScreen controllerSelectScreen;
     
     public PauseMenuScreen pauseMenu;
     public MainMenuScreen mainMenu;
@@ -74,6 +77,8 @@ public class AdventureBall extends Game {
         //Init Menu Screens
         pauseMenu = new PauseMenuScreen(this);
         mainMenu = new MainMenuScreen(this);
+        
+        controllerSelectScreen = new TeamSelectScreen(this);
         
         setScreen(mainMenu);
     }
@@ -135,11 +140,11 @@ public class AdventureBall extends Game {
             //if(Ouya.ID.equals(controller.getName()))
             if(Ouya.runningOnOuya)
             {
-            	Gdx.app.log("Main", "OUYA!");
+            	Gdx.app.log("Main", "Added Listener for Ouya Controller");
             	
             	OuyaListener listener = new OuyaListener();
                 controller.addListener(listener);
-                //listener.getControls();
+                
                 controls.add(listener.getControls());
             }
             else

@@ -7,12 +7,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.objects.Player;
 import com.garbri.proigo.core.objects.Wheel;
 
 public class Car extends Vehicle {
 	
-	public Car(Player player, World world, Vector2 position,
+	public Car(IControls controls, Player player, World world, Vector2 position,
 			float angle, Sprite carSprite, Sprite wheelSprite) {
 		super();
 		
@@ -26,8 +27,8 @@ public class Car extends Vehicle {
 		this.maxSpeed = 180f;
 		this.power = 60f;
 		
-		
 		this.player = player;
+		this.controls = controls;
 		
 		this.steer = Vehicle.STEER_NONE;
 		this.accelerate = Vehicle.ACC_NONE;
