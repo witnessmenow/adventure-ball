@@ -132,8 +132,11 @@ public class AdventureBall extends Game {
     private void initilizeControls() {
         for (Controller controller : Controllers.getControllers()) {
             Gdx.app.log("Main", controller.getName());
-            if(Ouya.ID.equals(controller.getName()))
+            //if(Ouya.ID.equals(controller.getName()))
+            if(Ouya.runningOnOuya)
             {
+            	Gdx.app.log("Main", "OUYA!");
+            	
             	OuyaListener listener = new OuyaListener();
                 controller.addListener(listener);
                 //listener.getControls();

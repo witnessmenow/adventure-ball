@@ -36,10 +36,11 @@
             <artifactId>kryonet</artifactId>
             <version>2.1.8</version>
         </dependency>
+        <!-- Updated to a nightly version of this jar Ouya support on stable is not working correctly -->
         <dependency>
 			<groupId>extensions</groupId>
 			<artifactId>gdx-controllers</artifactId>
-			<version>0.9.8</version>
+			<version>0.9.9</version>
 		</dependency>
 
 	</dependencies>
