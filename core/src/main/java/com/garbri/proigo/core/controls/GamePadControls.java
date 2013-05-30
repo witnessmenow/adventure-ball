@@ -6,6 +6,28 @@ public class GamePadControls implements IControls{
 	Boolean accelerate = false;
 	Boolean brake = false;
 	
+	Boolean up = false;
+	Boolean down = false;
+	Boolean start = false;
+	
+	public Boolean getUp() {
+		return up;
+	}
+	public void setUp(Boolean up) {
+		this.up = up;
+	}
+	public Boolean getDown() {
+		return down;
+	}
+	public void setDown(Boolean down) {
+		this.down = down;
+	}
+	public Boolean getStart() {
+		return start;
+	}
+	public void setStart(Boolean start) {
+		this.start = start;
+	}	
 	
 	public Boolean getBrake() {
 		return brake;

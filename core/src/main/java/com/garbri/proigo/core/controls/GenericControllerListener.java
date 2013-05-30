@@ -7,20 +7,43 @@ import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.math.Vector3;
 
-public class OuyaListener implements ControllerListener{
+public class GenericControllerListener implements ControllerListener{
+	
+	private final boolean debugLogging = true;
 	
 	GamePadControls controls = new GamePadControls();
 	
 	public GamePadControls getControls() {
-		Gdx.app.log("OuyaListener", "GetControls - return controls");
+		Gdx.app.log("GenericListener", "GetControls - return controls");
 		return controls;
 	}
 	
-	//Looking at the Java file on Github for The Ouya class Ouya.Button_A should be 97, and this is what the UI is sending when the a button is pressed
-	//but from testing it seems that Ouya.Button_A is set to 99
-	private int brakeButton = 97;
-	private int accelerateButton = Ouya.BUTTON_O;
-	private int startButton = 82; //OUYA BUTTON in middle of controller
+	
+	public GenericControllerListener()
+	{
+		setController = false;
+		setX = false;
+		setY = false;
+		setBrakeButton = false;
+		setAccelerateButton = false;
+		setStartButton = false;
+	}
+	
+	public boolean setController;
+	public boolean setX;
+	public boolean setY;
+	public boolean setBrakeButton;
+	public boolean setAccelerateButton;
+	public boolean setStartButton;
+	
+	private int xAxis;
+	private int yAxis;
+	
+	private int brakeButton;
+	private int accelerateButton;
+	private int startButton; 
+	
+	private Controller controller;
 
 	public void setControls(GamePadControls controls) {
 		this.controls = controls;
@@ -34,7 +57,23 @@ public class OuyaListener implements ControllerListener{
 
 	@Override
 	public boolean axisMoved(Controller arg0, int arg1, float arg2) {
-		if(arg1 == Ouya.AXIS_LEFT_X){
+		
+		if(setX)
+		{
+			if(arg2 < -0.15 || (arg2 > 0.15))
+			{
+				xAxis = arg1;
+			}
+		}
+		else if(setY)
+		{
+			if(arg2 < -0.15 || (arg2 > 0.15))
+			{
+				xAxis = arg1;
+			}
+		}
+		
+		if(arg1 == xAxis){
 			if(arg2 < -0.15){
 				controls.left = true;
 				controls.right = false;
@@ -46,7 +85,7 @@ public class OuyaListener implements ControllerListener{
 				controls.right = false;
 			}
 		}
-		else if (arg1 == Ouya.AXIS_LEFT_Y){
+		else if (arg1 == yAxis){
 			if(arg2 > 0.15){
 				controls.down = true;
 				controls.up = false;
@@ -65,7 +104,26 @@ public class OuyaListener implements ControllerListener{
 	@Override
 	public boolean buttonDown(Controller arg0, int buttonCode) {
 		
-		Gdx.app.log("OuyaListener", "ButtonCode: " + String.valueOf(buttonCode));
+		Gdx.app.log("GenericListener", "ButtonCode: " + String.valueOf(buttonCode));
+		
+		if(setController)
+		{
+			this.controller = arg0;
+		}
+		
+		if(setBrakeButton)
+		{
+			brakeButton = buttonCode;
+		}
+		else if (setAccelerateButton)
+		{
+			accelerateButton = buttonCode;
+		}
+		else if (setStartButton)
+		{
+			startButton = buttonCode;
+		}
+			
 		
 		if(buttonCode == accelerateButton)
 		{

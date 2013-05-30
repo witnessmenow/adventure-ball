@@ -101,9 +101,11 @@ public class SoccerScreen extends ScreenDebug {
     public void render(float delta) {
         //this.checkDebugInput(this.game);
     	
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+    	this.game.menuInputs.checkForInputs();
+    	
+		if (this.game.menuInputs.escapePressed)
         {
-            this.game.setScreen(this.game.mainMenu);
+			this.game.setScreen(this.game.pauseMenu);
         }
     	
         Gdx.gl.glClearColor(0, 0.5f, 0.05f, 1);

@@ -53,20 +53,20 @@ public class Vehicle {
 		return this.body.getLocalVector(this.body.getLinearVelocityFromLocalPoint(new Vector2(0, 0)));
 	}
 	
-	private void xboxControlRead(GamePadControls xboxcontrols)
+	private void ControlPadRead(GamePadControls gamePadControls)
 	{
 		//Read Acceleration/Braking
-		if (xboxcontrols.getAccelerate())
+		if (gamePadControls.getAccelerate())
 			this.accelerate = Vehicle.ACC_ACCELERATE;
-		else if (xboxcontrols.getBrake())
+		else if (gamePadControls.getBrake())
 			this.accelerate = Vehicle.ACC_BRAKE;
 		else
 			this.accelerate = Vehicle.ACC_NONE;
 		
 		// Read Stearing Command
-		if (xboxcontrols.getLeft())
+		if (gamePadControls.getLeft())
 			this.steer = Vehicle.STEER_LEFT;
-		else if (xboxcontrols.getRight())
+		else if (gamePadControls.getRight())
 			this.steer = Vehicle.STEER_RIGHT;
 		else
 			this.steer = Vehicle.STEER_NONE;
@@ -93,7 +93,7 @@ public class Vehicle {
 	{
 		if(this.player.controls instanceof GamePadControls)
 		{
-			xboxControlRead((GamePadControls)this.player.controls);
+			ControlPadRead((GamePadControls)this.player.controls);
 		}	
 		else if (this.player.controls instanceof KeyboardControls)
 		{

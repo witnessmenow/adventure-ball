@@ -1,11 +1,17 @@
 package com.garbri.proigo.core.controls;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.math.Vector3;
+import com.garbri.proigo.core.controls.mappers.Xbox360WindowsMapper;
 
 public class XboxListener implements ControllerListener {
+	
+	private final boolean debugLogging = true; 
+	
 	GamePadControls controls = new GamePadControls();
 	
 	public GamePadControls getControls() {
@@ -24,7 +30,11 @@ public class XboxListener implements ControllerListener {
 
 	@Override
 	public boolean axisMoved(Controller arg0, int arg1, float arg2) {
-		if(arg1 == 1){
+		
+		if(debugLogging)
+			Gdx.app.log("XboxListener-DEBUG", "Axis moved: arg1=" + String.valueOf(arg1) + " arg2=" + String.valueOf(arg2));
+		
+		if(arg1 == Xbox360WindowsMapper.LEFT_ANALOG_X){
 			if(arg2 < -0.2){
 				controls.left = true;
 				controls.right = false;
@@ -36,16 +46,39 @@ public class XboxListener implements ControllerListener {
 				controls.right = false;
 			}
 		} 
+		else if (arg1 == Xbox360WindowsMapper.LEFT_ANALOG_Y){
+			if(arg2 > 0.2){
+				controls.down = true;
+				controls.up = false;
+			} else if(arg2 < -0.2){
+				controls.down = false;
+				controls.up = true;
+			} else{
+				controls.down = false;
+				controls.up = false;
+			}
+		}
 		
 		return false;
 	}
 
 	@Override
 	public boolean buttonDown(Controller arg0, int buttonCode) {
-		if(buttonCode == 0){
-		controls.accelerate  = true;}
-		else if (buttonCode == 1){
+		
+		if(debugLogging)
+			Gdx.app.log("XboxListener-DEBUG", "Button Down: buttonCode=" + String.valueOf(buttonCode));
+		
+		if(buttonCode == Xbox360WindowsMapper.A_BUTTON)
+		{
+			controls.accelerate  = true;
+		}
+		else if (buttonCode == Xbox360WindowsMapper.B_BUTTON)
+		{
 			controls.brake = true;
+		}
+		else if (buttonCode == Xbox360WindowsMapper.START_BUTTON)
+		{
+			controls.start = true;
 		}
 		
 		return true;
@@ -53,11 +86,19 @@ public class XboxListener implements ControllerListener {
 
 	@Override
 	public boolean buttonUp(Controller arg0, int buttonCode) {
-		if(buttonCode == 0){
-			controls.accelerate  = false;}
-			else if (buttonCode == 1){
-				controls.brake = false;
-			}
+		
+		if(buttonCode == Xbox360WindowsMapper.A_BUTTON)
+		{
+			controls.accelerate  = false;
+		}
+		else if (buttonCode == Xbox360WindowsMapper.B_BUTTON)
+		{
+			controls.brake = false;
+		}
+		else if (buttonCode == Xbox360WindowsMapper.START_BUTTON)
+		{
+			controls.start = false;
+		}
 		return true;
 	}
 
@@ -73,9 +114,14 @@ public class XboxListener implements ControllerListener {
 		
 	}
 
+	
+	//This is the D-PAD
 	@Override
 	public boolean povMoved(Controller arg0, int arg1, PovDirection arg2) {
-		// TODO Auto-generated method stub
+
+		if(debugLogging)
+			Gdx.app.log("XboxListener-DEBUG", "POV moved: arg1=" + String.valueOf(arg1) + " arg2=" + String.valueOf(arg2));
+		
 		return false;
 	}
 

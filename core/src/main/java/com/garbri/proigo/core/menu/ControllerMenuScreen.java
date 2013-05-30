@@ -1,4 +1,4 @@
-package com.garbri.proigo.core.screens;
+package com.garbri.proigo.core.menu;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,10 +17,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.garbri.proigo.core.AdventureBall;
-import com.garbri.proigo.core.menu.MenuOptionConstants;
+import com.garbri.proigo.core.controls.GenericControllerListener;
+import com.garbri.proigo.core.screens.SoccerScreen;
 import com.garbri.proigo.core.utilities.TextDisplayHelper;
 
-public class PauseMenuScreen implements Screen{
+public class ControllerMenuScreen implements Screen{
 
 	private int screenWidth;
     private int screenHeight;
@@ -43,9 +45,11 @@ public class PauseMenuScreen implements Screen{
 	
 	private float movementCoolDown = 0f;
 	
-    public PauseMenuScreen(AdventureBall game)
+    public ControllerMenuScreen(AdventureBall game)
     {
     	this.game = game;
+    	
+    	
     	
     	this.font = new BitmapFont(Gdx.files.internal("Fonts/Const-50.fnt"), Gdx.files.internal("Fonts/Const-50.png"), false);
     	//Make text black
@@ -59,11 +63,13 @@ public class PauseMenuScreen implements Screen{
         
         menuOptions = new ArrayList<String>(); 
         
-        menuOptions.add(MenuOptionConstants.changeLevel);
-        menuOptions.add(MenuOptionConstants.numberOfPlayers);
-        menuOptions.add(MenuOptionConstants.resetGame);
-        menuOptions.add(MenuOptionConstants.startServer);
-        menuOptions.add(MenuOptionConstants.startClient);
+        for(int i = 1; i <=4; i++)
+        {
+        	menuOptions.add(MenuOptionConstants.setPlayerControls + i);
+        }
+        menuOptions.add(MenuOptionConstants.done);
+        
+
      }
     
 	@Override
@@ -78,15 +84,22 @@ public class PauseMenuScreen implements Screen{
 
         spriteBatch.setProjectionMatrix(camera.combined);
         
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER))
+        //Check have users made any inputs
+        this.game.menuInputs.checkForInputs();
+        
+        if(this.game.menuInputs.enterPressed)
         {
         	handleSelection();
+        }
+        else if(this.game.menuInputs.escapePressed)
+        {
+        	//Return to current screen, keeping state
         }
         
         if(this.movementCoolDown <= 0f)
         {
         	//We are ok to check for movement
-        	if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
+        	if(this.game.menuInputs.downPressed)
         	{
         		if(this.selectedOption >= this.menuOptions.size()-1)
         		{
@@ -98,7 +111,7 @@ public class PauseMenuScreen implements Screen{
         		}
         		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
        		}
-        	else if(Gdx.input.isKeyPressed(Input.Keys.UP))
+        	else if(this.game.menuInputs.upPressed)
         	{
         		if(this.selectedOption == 0)
         		{
@@ -141,46 +154,37 @@ public class PauseMenuScreen implements Screen{
 
 	private void handleSelection() {
 		
-		String selectedOption = this.menuOptions.get(this.selectedOption);
+		String selectedOptionString = this.menuOptions.get(this.selectedOption);
 		
-		if(selectedOption.equals(MenuOptionConstants.changeLevel))
+		if(this.selectedOption < 4)
 		{
-			if (this.game.activeScreen instanceof SoccerScreen)
-			{
-				this.game.activeScreen = this.game.raceScreen;
-			}
-			else
-			{
-				this.game.activeScreen = this.game.soccerScreen;
-			}
+			setControls(this.selectedOption);
 		}
-		else if(selectedOption.equals(MenuOptionConstants.numberOfPlayers))
-		{
-			if(this.game.players.size() == 2)
-			{
-				this.game.changeNumberPlayers(4, this.game.activeScreen);
-			}
-			else
-			{
-				this.game.changeNumberPlayers(2, this.game.activeScreen);
-			}
-		}
-		else if(selectedOption.equals(MenuOptionConstants.resetGame))
+		else if(selectedOptionString.equals(MenuOptionConstants.configureControllers))
 		{
 			
 		}
-		else if(selectedOption.equals(MenuOptionConstants.startServer))
-		{
-			this.game.startServer();
-		}
-		else if(selectedOption.equals(MenuOptionConstants.startClient))
-		{
-			this.game.connectToServer();
-		}
+
 		// TODO Auto-generated method stub
 		
 		
 		this.game.setScreen(this.game.activeScreen);
+	}
+	
+	private GenericControllerListener setControls(int playerNumber)
+	{
+		if(this.game.players.size() <= playerNumber)
+		{
+			//throw error, or something!
+		}
+		
+		GenericControllerListener listener = new GenericControllerListener();
+		
+		Controllers.addListener(listener);
+		
+		return listener;
+		
+		
 	}
 
 	@Override

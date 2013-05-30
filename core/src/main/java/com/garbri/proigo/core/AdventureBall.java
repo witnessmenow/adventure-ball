@@ -13,10 +13,12 @@ import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
 import com.garbri.proigo.core.controls.OuyaListener;
 import com.garbri.proigo.core.controls.XboxListener;
+import com.garbri.proigo.core.menu.MainMenuScreen;
+import com.garbri.proigo.core.menu.MenuInputsHelper;
+import com.garbri.proigo.core.menu.PauseMenuScreen;
 import com.garbri.proigo.core.networking.client.GameClient;
 import com.garbri.proigo.core.networking.server.GameServer;
 import com.garbri.proigo.core.objects.Player;
-import com.garbri.proigo.core.screens.PauseMenuScreen;
 import com.garbri.proigo.core.screens.NetworkedSoccerScreen;
 import com.garbri.proigo.core.screens.RaceScreen;
 import com.garbri.proigo.core.screens.SoccerScreen;
@@ -26,32 +28,54 @@ public class AdventureBall extends Game {
     public RaceScreen raceScreen;
     public SoccerScreen soccerScreen;
     public NetworkedSoccerScreen networkedSoccerScreen;
-    public PauseMenuScreen mainMenu;
+    
+    public PauseMenuScreen pauseMenu;
+    public MainMenuScreen mainMenu;
 
     //Number of players;
     public ArrayList<Player> players;
     public ArrayList<Player> NetworkPlayers;
 
-    ArrayList<IControls> controls = new ArrayList<IControls>();
+    public ArrayList<IControls> controls = new ArrayList<IControls>();
 
     public GameServer gameServer;
     public GameClient gameClient;
     
     public Screen activeScreen;
+    
+    public MenuInputsHelper menuInputs;
 
     @Override
     public void create() {
 
+    	this.menuInputs = new MenuInputsHelper(this);
+    	
         this.initilizeControls();
-        int numPlayers = 4;
+        
+        int numPlayers;
+        
+        if(this.controls.size() != 4)
+        {
+        	numPlayers = 2;
+        }
+        else
+        {
+        	numPlayers = 4;
+        }
+        
         createPlayers(numPlayers);
+        
+        //Init Screens
         raceScreen = new RaceScreen(this);
         soccerScreen = new SoccerScreen(this);
-        networkedSoccerScreen = new NetworkedSoccerScreen(this);
-        mainMenu = new PauseMenuScreen(this);
         this.soccerScreen.ballOffsetX = 0f;
-
-        setScreen(raceScreen);
+        networkedSoccerScreen = new NetworkedSoccerScreen(this);
+        
+        //Init Menu Screens
+        pauseMenu = new PauseMenuScreen(this);
+        mainMenu = new MainMenuScreen(this);
+        
+        setScreen(mainMenu);
     }
 
     private void createPlayers(int numberOfPlayers) {
@@ -74,7 +98,14 @@ public class AdventureBall extends Game {
     }
 
     public void changeNumberPlayers(int numberOfPlayers, Screen screen) {
-        createPlayers(numberOfPlayers);
+        
+    	if(numberOfPlayers > this.controls.size())
+    	{
+    		numberOfPlayers = 2;
+    		Gdx.app.log("Main", "Not enough controllers, changing to 2 player");
+    	}
+    	
+    	createPlayers(numberOfPlayers);
         setScreen(screen);
     }
 
@@ -119,10 +150,12 @@ public class AdventureBall extends Game {
 
         }
 
-        controls.add(new KeyboardControls(Input.Keys.DPAD_UP, Input.Keys.DPAD_DOWN, Input.Keys.DPAD_LEFT, Input.Keys.DPAD_RIGHT));
-        controls.add(new KeyboardControls(Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D));
-        controls.add(new KeyboardControls(Input.Keys.DPAD_UP, Input.Keys.DPAD_DOWN, Input.Keys.DPAD_LEFT, Input.Keys.DPAD_RIGHT));
-        controls.add(new KeyboardControls(Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D));
+        controls.add(new KeyboardControls(Input.Keys.DPAD_UP, Input.Keys.DPAD_DOWN, Input.Keys.DPAD_LEFT, Input.Keys.DPAD_RIGHT, Input.Keys.ENTER, Input.Keys.ESCAPE));
+        controls.add(new KeyboardControls(Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D, Input.Keys.ENTER, Input.Keys.ESCAPE));
     }
 
+    public ArrayList<IControls> getControllers()
+    {
+    	return this.controls;
+    }
 }
