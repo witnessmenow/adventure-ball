@@ -104,14 +104,18 @@ public class AdventureBall extends Game {
 
     public void changeNumberPlayers(int numberOfPlayers, Screen screen) {
         
-    	if(numberOfPlayers > this.controls.size())
-    	{
-    		numberOfPlayers = 2;
-    		Gdx.app.log("Main", "Not enough controllers, changing to 2 player");
-    	}
+//    	if(numberOfPlayers > this.controls.size())
+//    	{
+//    		numberOfPlayers = 2;
+//    		Gdx.app.log("Main", "Not enough controllers, changing to 2 player");
+//    	}
     	
     	createPlayers(numberOfPlayers);
-        setScreen(screen);
+        
+    	if(screen != null)
+    	{
+    		setScreen(screen);
+    	}
     }
 
     public void startServer() {

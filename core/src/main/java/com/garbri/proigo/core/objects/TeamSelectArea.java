@@ -3,6 +3,8 @@ package com.garbri.proigo.core.objects;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.garbri.proigo.core.utilities.BoxProp;
@@ -26,6 +28,11 @@ public class TeamSelectArea {
 	public int carsInBlueArea = 0;
 	public int carsInRedArea = 0;
 	
+	private float blueTextPosition;
+	private float redTextPosition;
+	private float textY;
+	
+	
 	public TeamSelectArea(World world, float worldWidth, float worldHeight, Vector2 center)
 	{
 		this.walls = new ArrayList<BoxProp>();
@@ -40,6 +47,12 @@ public class TeamSelectArea {
 		
 		//make it even!
 		createInnerWalls(world, worldWidth, worldHeight, center, gapFromOuterEdge);
+		
+		//Changethis!
+		this.blueTextPosition = 2*10;
+		this.redTextPosition = (((worldWidth/16)*12)+2)*10;
+		
+		this.textY = ((worldHeight/2)*10) + 50; 
 		
 		
 		
@@ -101,17 +114,38 @@ public class TeamSelectArea {
 		for (Vehicle vehicle : vehicles) 
 		{
 			//Check for Blue
-			if(vehicle.body.getPosition().x <= worldWidth/4)
+			if(checkVehicleInBlue(vehicle))
 			{
 				this.carsInBlueArea++;
 			}
-			else if(vehicle.body.getPosition().x >= 3*(worldWidth/4))
+			else if(checkVehicleInRed(vehicle))
 			{
 				this.carsInRedArea++;
 			}
 		}
 	
 		
+	}
+	
+	public void displayNumbersInTeam(BitmapFont font, SpriteBatch spriteBatch)
+	{
+		//Set for blue
+		font.setColor(0f, 0f, 1f, 1.0f);
+        font.draw(spriteBatch, String.valueOf(this.carsInBlueArea) + " TEAM BLUE", blueTextPosition, textY);
+        
+      //Set for blue
+      		font.setColor(1f, 0f, 0f, 1.0f);
+              font.draw(spriteBatch, String.valueOf(this.carsInRedArea) + " TEAM RED", redTextPosition, textY);
+	}
+	
+	public boolean checkVehicleInBlue(Vehicle vehicle)
+	{
+		return (vehicle.body.getPosition().x <= worldWidth/4); 
+	}
+	
+	public boolean checkVehicleInRed(Vehicle vehicle)
+	{
+		return (vehicle.body.getPosition().x >= 3*(worldWidth/4)); 
 	}
 	
 

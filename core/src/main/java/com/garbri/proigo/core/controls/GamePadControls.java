@@ -10,6 +10,23 @@ public class GamePadControls implements IControls{
 	Boolean down = false;
 	Boolean start = false;
 	
+	Boolean rightBumper = false;
+	
+	Boolean leftBumper = false;
+	
+	public Boolean getRightBumper() {
+		return rightBumper;
+	}
+	public void setRightBumper(Boolean rightBumper) {
+		this.rightBumper = rightBumper;
+	}
+	public Boolean getLeftBumper() {
+		return leftBumper;
+	}
+	public void setLeftBumper(Boolean leftBumper) {
+		this.leftBumper = leftBumper;
+	}
+	
 	public Boolean getUp() {
 		return up;
 	}

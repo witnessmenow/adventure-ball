@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -16,8 +17,10 @@ import com.garbri.proigo.core.AdventureBall;
 import com.garbri.proigo.core.controls.GamePadControls;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
+import com.garbri.proigo.core.objects.Player;
 import com.garbri.proigo.core.objects.TeamSelectArea;
 import com.garbri.proigo.core.utilities.SpriteHelper;
+import com.garbri.proigo.core.utilities.TimerHelper;
 import com.garbri.proigo.core.vehicles.Car;
 import com.garbri.proigo.core.vehicles.Vehicle;
 
@@ -46,6 +49,13 @@ public class TeamSelectScreen implements Screen{
 	    private AdventureBall game;
 	    
 	    private TeamSelectArea area;
+	    
+	    public BitmapFont font;
+	    
+	    private boolean gotReadyFlag;
+	    
+	    private TimerHelper timer;
+	    
 	
 	public TeamSelectScreen(AdventureBall game) 
 	{
@@ -65,6 +75,8 @@ public class TeamSelectScreen implements Screen{
         this.camera.setToOrtho(false, this.screenWidth, this.screenHeight);
 
         this.debugRenderer = new Box2DDebugRenderer();
+        
+        this.font = new BitmapFont(Gdx.files.internal("Fonts/Const-50.fnt"), Gdx.files.internal("Fonts/Const-50.png"), false);
 
         this.vehicles = new ArrayList<Car>();
 	}
@@ -79,24 +91,44 @@ public class TeamSelectScreen implements Screen{
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
         
+        this.timer.progressTime();
         
         world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
 
         world.clearForces();
         
-        checkForInputs();
+        if(this.timer.elapsedTimeInSeconds > 1)
+        {
+        	checkForInputs();
+        }
         
         for (Vehicle vehicle : this.vehicles) {
             vehicle.controlVehicle();
         }
         
+        this.area.checkTeams(vehicles);
+        
         this.spriteBatch.begin();
+        
+        
+        this.font.setColor(1f, 1f, 1f, 1.0f);
+        this.font.draw(spriteBatch, "Join A Team!", this.screenWidth/2 - 110, this.screenHeight - 50);
+        
+        this.area.displayNumbersInTeam(font, spriteBatch);
+        
         for (Vehicle vehicle : this.vehicles) {
             vehicle.updateSprite(spriteBatch, PIXELS_PER_METER);
         }
         this.spriteBatch.end();
         
+        
+        
         debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
+	
+        if(this.gotReadyFlag)
+        {
+        	startGame();
+        }
 	}
 
 	@Override
@@ -104,10 +136,50 @@ public class TeamSelectScreen implements Screen{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private void startGame()
+	{
+		int numPlayers = this.activeControllers.size();
+		
+		this.game.changeNumberPlayers(numPlayers, null);
+		
+		for (int i = 0; i < numPlayers; i++)
+		{
+			this.game.players.get(i).controls = this.activeControllers.get(i);
+			
+			Vehicle vehicle = getVehicleFromController(this.activeControllers.get(i));
+			
+			if(this.area.checkVehicleInBlue(vehicle))
+			{
+				this.game.players.get(i).playerTeam = Player.team.blue;
+			}
+			else
+			{
+				this.game.players.get(i).playerTeam = Player.team.red;
+			}
+		}
+		
+		this.game.setScreen(this.game.raceScreen);
+	}
+	
+	private Vehicle getVehicleFromController(IControls control)
+	{
+		for(Vehicle vehicle : this.vehicles)
+		{
+			if (vehicle.controls.equals(control))
+			{
+				return vehicle;
+			}
+		}
+		
+		return null;
+	}
 
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
+		
+		this.gotReadyFlag = false;
 		
 		spriteBatch = new SpriteBatch();
 
@@ -118,6 +190,8 @@ public class TeamSelectScreen implements Screen{
 		createAllCars();
 		
 		this.activeControllers = new ArrayList<IControls>();
+		
+		this.timer = new TimerHelper();
 	}
 	
 	public void checkForInputs()
@@ -134,6 +208,11 @@ public class TeamSelectScreen implements Screen{
 					{
 						addControlsToVehicle(cont);
 					}
+					
+					if (((GamePadControls) cont).getStart())
+					{
+						this.gotReadyFlag = true;
+					}
 				}	
 				else if (cont instanceof KeyboardControls)
 				{
@@ -143,8 +222,35 @@ public class TeamSelectScreen implements Screen{
 					{
 						addControlsToVehicle(cont);
 					} 
+					
+					if(Gdx.input.isKeyPressed(keyCont.enter))
+					{
+						this.gotReadyFlag = true;
+					} 
 	
 				}
+			}
+			else
+			{
+				//These are active controllers
+				if(cont instanceof GamePadControls)
+				{
+					if (((GamePadControls) cont).getRightBumper())
+					{
+						this.gotReadyFlag = true;
+					}
+				}	
+				else if (cont instanceof KeyboardControls)
+				{
+					KeyboardControls keyCont = (KeyboardControls)cont;
+					
+					if(Gdx.input.isKeyPressed(keyCont.enter))
+					{
+						this.gotReadyFlag = true;
+					} 
+	
+				}
+				
 			}
 		}
 		
