@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
@@ -23,6 +24,7 @@ import com.garbri.proigo.core.screens.TeamSelectScreen;
 import com.garbri.proigo.core.screens.NetworkedSoccerScreen;
 import com.garbri.proigo.core.screens.RaceScreen;
 import com.garbri.proigo.core.screens.SoccerScreen;
+import com.garbri.proigo.core.utilities.MusicHelper;
 
 public class AdventureBall extends Game {
 
@@ -47,10 +49,14 @@ public class AdventureBall extends Game {
     public Screen activeScreen;
     
     public MenuInputsHelper menuInputs;
+    
+    public Music music;
 
     @Override
     public void create() {
-
+    	
+    	this.music = MusicHelper.playMenuMusic(music);
+    	
     	this.menuInputs = new MenuInputsHelper(this);
     	
         this.initilizeControls();
