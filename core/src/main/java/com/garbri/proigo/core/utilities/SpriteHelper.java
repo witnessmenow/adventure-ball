@@ -23,6 +23,7 @@ public class SpriteHelper {
 		this.ballTexture = new Texture(Gdx.files.internal("Ball.png"));
 		this.finishLineTexture = new Texture(Gdx.files.internal("finishLine.png"));
 		this.pitch = new Texture(Gdx.files.internal("pitch.png"));
+		
 	}
 	
 	public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch, int PIXELS_PER_METER, Body body)
@@ -31,6 +32,13 @@ public class SpriteHelper {
 
 		sprite.draw(spriteBatch);
 	}
+	
+	public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch, float x, float y)
+	{
+		sprite.setPosition(x - sprite.getWidth()/2 , y - sprite.getHeight()/2);
+		sprite.draw(spriteBatch);
+	}
+	
 	
 	public static void setSpritePosition(Sprite sprite, int PIXELS_PER_METER, Body body)
 	{

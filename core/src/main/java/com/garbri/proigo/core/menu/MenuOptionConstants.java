@@ -10,6 +10,13 @@ public class MenuOptionConstants
 	public static final String startServer = "Start Server";
 	public static final String startClient = "Start Client";
 	
+	public static final String RESUME = "Resume";
+	public static final String SOUND = "Sound";
+	public static final String TEAMSELECT = "Team Select";
+	public static final String CONTROLS = "Controls";
+	public static final String QUIT = "Quit to Main Menu";
+	
+	
 	
 	//MAIN MENU OPTIONS
 	public static final String startGame = "Start Game!";
@@ -24,5 +31,6 @@ public class MenuOptionConstants
 	//Timer that needs to elapse between option movements
 	public static final float slowDownTimer = 0.2f;
 	
+	public static enum pauseMenuOption{resume, sound, teamSelect, controls, quit}
 
 }

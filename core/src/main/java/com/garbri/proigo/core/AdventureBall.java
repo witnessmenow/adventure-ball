@@ -16,6 +16,10 @@ import com.garbri.proigo.core.controls.OuyaListener;
 import com.garbri.proigo.core.controls.XboxListener;
 import com.garbri.proigo.core.menu.MainMenuScreen;
 import com.garbri.proigo.core.menu.MenuInputsHelper;
+import com.garbri.proigo.core.menu.MenuOptionConstants;
+import com.garbri.proigo.core.menu.MenuOptionConstants.pauseMenuOption;
+import com.garbri.proigo.core.menu.PauseMenuItem;
+import com.garbri.proigo.core.menu.PauseMenuOverlay;
 import com.garbri.proigo.core.menu.PauseMenuScreen;
 import com.garbri.proigo.core.networking.client.GameClient;
 import com.garbri.proigo.core.networking.server.GameServer;
@@ -36,6 +40,8 @@ public class AdventureBall extends Game {
     
     public PauseMenuScreen pauseMenu;
     public MainMenuScreen mainMenu;
+    
+    public PauseMenuOverlay pauseOverlay;
 
     //Number of players;
     public ArrayList<Player> players;
@@ -81,6 +87,8 @@ public class AdventureBall extends Game {
         networkedSoccerScreen = new NetworkedSoccerScreen(this);
         
         //Init Menu Screens
+        
+        createPauseMenu();
         pauseMenu = new PauseMenuScreen(this);
         mainMenu = new MainMenuScreen(this);
         
@@ -175,5 +183,19 @@ public class AdventureBall extends Game {
     public ArrayList<IControls> getControllers()
     {
     	return this.controls;
+    }
+    
+    private void createPauseMenu()
+    {
+    	ArrayList<PauseMenuItem> items = new ArrayList<PauseMenuItem>();
+    	
+
+    	items.add(new PauseMenuItem(MenuOptionConstants.RESUME, pauseMenuOption.resume));
+    	items.add(new PauseMenuItem(MenuOptionConstants.TEAMSELECT, pauseMenuOption.teamSelect));
+    	items.add(new PauseMenuItem(MenuOptionConstants.CONTROLS, pauseMenuOption.controls));
+    	items.add(new PauseMenuItem(MenuOptionConstants.SOUND, pauseMenuOption.sound));
+    	items.add(new PauseMenuItem(MenuOptionConstants.QUIT, pauseMenuOption.quit));
+    	
+    	pauseOverlay = new PauseMenuOverlay(this, items);
     }
 }

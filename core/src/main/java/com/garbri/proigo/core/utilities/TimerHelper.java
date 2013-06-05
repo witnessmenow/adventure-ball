@@ -44,5 +44,10 @@ public class TimerHelper {
 	{
 		this.countDownTimer = timeInSeconds;
 	}
+	
+	public void resumeTimer()
+	{
+		gameStartTime = TimeUtils.millis() - elapsedTimeInSeconds*1000;
+	}
 
 }
