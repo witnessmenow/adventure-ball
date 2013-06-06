@@ -80,6 +80,10 @@ public class XboxListener implements ControllerListener {
 		{
 			controls.start = true;
 		}
+		else if (buttonCode == Xbox360WindowsMapper.R_BUMPER)
+		{
+			controls.rightBumper = true;
+		}
 		
 		return true;
 	}
@@ -98,6 +102,10 @@ public class XboxListener implements ControllerListener {
 		else if (buttonCode == Xbox360WindowsMapper.START_BUTTON)
 		{
 			controls.start = false;
+		}
+		else if (buttonCode == Xbox360WindowsMapper.R_BUMPER)
+		{
+			controls.rightBumper = true;
 		}
 		return true;
 	}
