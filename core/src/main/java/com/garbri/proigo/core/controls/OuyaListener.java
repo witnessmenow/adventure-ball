@@ -80,7 +80,7 @@ public class OuyaListener implements ControllerListener{
 		else if (buttonCode == startButton || buttonCode == 108)
 		{
 			//This is causing issues on Ouya anyways, start button never seems to be false after clicking start once
-			//controls.start = true;
+			controls.start = true;
 			Gdx.app.log("OuyaListener", "Start is pressed");
 		}
 		else if (buttonCode == 103)
@@ -98,6 +98,8 @@ public class OuyaListener implements ControllerListener{
 	@Override
 	public boolean buttonUp(Controller arg0, int buttonCode) {
 		
+		Gdx.app.log("OuyaListener", "Button Up  - ButtonCode: " + String.valueOf(buttonCode));
+		
 		if(buttonCode == accelerateButton)
 		{
 			controls.accelerate  = false;
@@ -106,9 +108,10 @@ public class OuyaListener implements ControllerListener{
 		{
 			controls.brake = false;
 		}
-		else if (buttonCode == startButton)
+		else if (buttonCode == startButton|| buttonCode == 108)
 		{
 			controls.start = false;
+			Gdx.app.log("OuyaListener", "Start Button is up");
 		}
 		else if (buttonCode == 103)
 		{

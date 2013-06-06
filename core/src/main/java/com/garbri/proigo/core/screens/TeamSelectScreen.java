@@ -19,6 +19,7 @@ import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
 import com.garbri.proigo.core.objects.Player;
 import com.garbri.proigo.core.objects.TeamSelectArea;
+import com.garbri.proigo.core.utilities.MusicHelper;
 import com.garbri.proigo.core.utilities.SpriteHelper;
 import com.garbri.proigo.core.utilities.TimerHelper;
 import com.garbri.proigo.core.vehicles.Car;
@@ -159,6 +160,7 @@ public class TeamSelectScreen implements Screen{
 			}
 		}
 		
+		this.game.music = MusicHelper.playGameMusic(this.game.music);
 		this.game.setScreen(this.game.raceScreen);
 	}
 	

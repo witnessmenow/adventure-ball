@@ -62,7 +62,10 @@ public class MenuInputsHelper {
 		if (gamePadControls.getAccelerate())
 			this.enterPressed = true;
 		else if (gamePadControls.getStart())
+		{
+			Gdx.app.log("MenuInputsHelper", "Start is pressed");
 			this.escapePressed = true;
+		}
 
 	}
 	

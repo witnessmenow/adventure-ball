@@ -144,119 +144,147 @@ private OrthographicCamera camera;
 	public void render(float delta) {
         
 		this.game.menuInputs.checkForInputs();
-		if (this.game.menuInputs.escapePressed)
-        {
-			this.game.setScreen(this.game.pauseMenu);
-        }
 
-	    Gdx.gl.glClearColor(0, 0f, 0f, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-
-		this.timer.progressTime();
-		
-	    // tell the camera to update its matrices.
-	    camera.update();
+		if(!this.game.pauseOverlay.pauseMenuActive)
+	    {
+			if (this.game.pauseOverlay.pauseCoolDownActive)
+			{
+				this.game.pauseOverlay.reduceCoolDown(delta);
+			}
+			else if (this.game.menuInputs.escapePressed)
+	        {
+				this.game.pauseOverlay.attemptToPause();
+	        }
+			
+			Gdx.gl.glClearColor(0, 0f, 0f, 1);
 	    
-		spriteBatch.setProjectionMatrix(camera.combined);
-
-		this.spriteBatch.begin();
-
-		if (this.timer.countDownTimer == 0)
-		{
+			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			
+	
+			this.timer.progressTime();
+			
+		    // tell the camera to update its matrices.
+		    camera.update();
+		    
+			spriteBatch.setProjectionMatrix(camera.combined);
+	
+			this.spriteBatch.begin();
+	
+			if (this.timer.countDownTimer == 0)
+			{
+				
+				for (Vehicle vehicle:this.vehicles)
+				{
+					vehicle.controlVehicle();
+				}
+				
+			}
+			else
+			{
+				if(!this.displayWinMessage)
+					textDisplayer.font.draw(spriteBatch, "RACE TO THE MIDDLE TO GAIN THE ADVANTAGE" , (center.x * PIXELS_PER_METER) - ("RACE TO THE MIDDLE TO GAIN THE ADVANTAGE   ".length() * 3) , (center.y - 10f) * PIXELS_PER_METER);
+			}
+	
+			this.ball.update();
+			
+			if (!this.displayWinMessage)
+			{
+				//Player 1 wins if both cars reach it at the same time - MNaybe we should randomize this
+			
+				for (Vehicle vehicle:this.vehicles)
+				{
+					if (this.maze.checkForWin(vehicle.body.getPosition(), vehicle.player.playerName))
+					{
+						this.displayWinMessage = true;
+						this.winMessage = vehicle.player.getTeamName().toUpperCase() + " TEAM WINS";
+						this.timer.startCountDown(3);
+					}
+				}
+				
+			}
+			
+			
+			
+			
+			/**
+			 * Have box2d update the positions and velocities (and etc) of all
+			 * tracked objects. The second and third argument specify the number of
+			 * iterations of velocity and position tests to perform -- higher is
+			 * more accurate but is also slower.
+			 */
+			world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
+			
+			world.clearForces();
+			
+			this.finishLine.setPosition((this.center.x * PIXELS_PER_METER) - this.finishLine.getWidth()/2, (this.center.y * PIXELS_PER_METER) - this.finishLine.getHeight()/2);
+			this.finishLine.draw(spriteBatch);
+			
 			
 			for (Vehicle vehicle:this.vehicles)
 			{
-				vehicle.controlVehicle();
+				vehicle.updateSprite(spriteBatch, PIXELS_PER_METER);
 			}
 			
-		}
+			//Update Ball
+			SpriteHelper.updateSprite(ball.sprite, spriteBatch, PIXELS_PER_METER, ball.body);
+			
+			if (this.displayWinMessage)
+			{
+				textDisplayer.font.draw(spriteBatch, this.winMessage , (center.x * PIXELS_PER_METER) - (this.winMessage.length() * 3) , center.y * PIXELS_PER_METER);
+				
+				if(this.timer.countDownTimer == 0)
+				{
+					if(this.winMessage.equals("RED TEAM WINS"))
+					{
+						this.game.soccerScreen.ballOffsetX = 40f; 
+					}
+					else
+					{
+						this.game.soccerScreen.ballOffsetX = -40f; 
+					}
+					
+					this.game.setScreen(this.game.soccerScreen);
+					
+				}
+			}
+			
+			String temp = this.timer.getElapsedTimeAsString();
+	
+			textDisplayer.font.draw(spriteBatch, temp , (center.x * PIXELS_PER_METER) - (temp.length() * 3) ,(worldHeight-1f) * PIXELS_PER_METER);
+			
+			this.spriteBatch.end();
+			
+			/**
+			 * Draw this last, so we can see the collision boundaries on top of the
+			 * sprites and map.
+			 */
+			debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
+	    }
 		else
 		{
-			if(!this.displayWinMessage)
-				textDisplayer.font.draw(spriteBatch, "RACE TO THE MIDDLE TO GAIN THE ADVANTAGE" , (center.x * PIXELS_PER_METER) - ("RACE TO THE MIDDLE TO GAIN THE ADVANTAGE   ".length() * 3) , (center.y - 10f) * PIXELS_PER_METER);
-		}
-
-		this.ball.update();
-		
-		if (!this.displayWinMessage)
-		{
-			//Player 1 wins if both cars reach it at the same time - MNaybe we should randomize this
-		
-			for (Vehicle vehicle:this.vehicles)
-			{
-				if (this.maze.checkForWin(vehicle.body.getPosition(), vehicle.player.playerName))
-				{
-					this.displayWinMessage = true;
-					this.winMessage = vehicle.player.getTeamName().toUpperCase() + " TEAM WINS";
-					this.timer.startCountDown(3);
-				}
-			}
+			//Pause menu is active 
 			
-		}
-		
-		
-		
-		
-		/**
-		 * Have box2d update the positions and velocities (and etc) of all
-		 * tracked objects. The second and third argument specify the number of
-		 * iterations of velocity and position tests to perform -- higher is
-		 * more accurate but is also slower.
-		 */
-		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
-		
-		world.clearForces();
-		
-		this.finishLine.setPosition((this.center.x * PIXELS_PER_METER) - this.finishLine.getWidth()/2, (this.center.y * PIXELS_PER_METER) - this.finishLine.getHeight()/2);
-		this.finishLine.draw(spriteBatch);
-		
-		
-		for (Vehicle vehicle:this.vehicles)
-		{
-			vehicle.updateSprite(spriteBatch, PIXELS_PER_METER);
-		}
-		
-		//Update Ball
-		SpriteHelper.updateSprite(ball.sprite, spriteBatch, PIXELS_PER_METER, ball.body);
-		
-		if (this.displayWinMessage)
-		{
-			textDisplayer.font.draw(spriteBatch, this.winMessage , (center.x * PIXELS_PER_METER) - (this.winMessage.length() * 3) , center.y * PIXELS_PER_METER);
+			this.spriteBatch.begin();
 			
-			if(this.timer.countDownTimer == 0)
+			this.game.pauseOverlay.renderMenuScreen(delta, spriteBatch);
+			
+			this.spriteBatch.end();
+			
+			if(!this.game.pauseOverlay.pauseMenuActive)
 			{
-				if(this.winMessage.equals("RED TEAM WINS"))
-				{
-					this.game.soccerScreen.ballOffsetX = 40f; 
-				}
-				else
-				{
-					this.game.soccerScreen.ballOffsetX = -40f; 
-				}
+				//Game is about to resume
 				
-				this.game.setScreen(this.game.soccerScreen);
-				
+				this.timer.resumeTimer();
 			}
 		}
-		
-		String temp = this.timer.getElapsedTimeAsString();
-
-		textDisplayer.font.draw(spriteBatch, temp , (center.x * PIXELS_PER_METER) - (temp.length() * 3) ,(worldHeight-1f) * PIXELS_PER_METER);
-		
-		this.spriteBatch.end();
-		
-		/**
-		 * Draw this last, so we can see the collision boundaries on top of the
-		 * sprites and map.
-		 */
-		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
 	}
 
 	@Override
 	public void show() {
 		
 		this.game.activeScreen = this;
+		
+		this.game.pauseOverlay.setScreenCenter(center, PIXELS_PER_METER);
 
 		//Leaving this here since creating a new world everytime we load might not be a bad idea from a clean up perspictive
 		this.world = new World(new Vector2(0.0f, 0.0f), true);

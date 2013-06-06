@@ -42,6 +42,7 @@ public class MainMenuScreen implements Screen{
 	private AdventureBall game;
 	
 	private float movementCoolDown = 0f;
+	private float CoolDown = 0f;
 	
     public MainMenuScreen(AdventureBall game)
     {
@@ -93,6 +94,7 @@ public class MainMenuScreen implements Screen{
         
         if(this.movementCoolDown <= 0f)
         {
+        	
         	//We are ok to check for movement
         	if(this.game.menuInputs.downPressed)
         	{

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
@@ -15,6 +16,10 @@ import com.garbri.proigo.core.controls.OuyaListener;
 import com.garbri.proigo.core.controls.XboxListener;
 import com.garbri.proigo.core.menu.MainMenuScreen;
 import com.garbri.proigo.core.menu.MenuInputsHelper;
+import com.garbri.proigo.core.menu.MenuOptionConstants;
+import com.garbri.proigo.core.menu.MenuOptionConstants.pauseMenuOption;
+import com.garbri.proigo.core.menu.PauseMenuItem;
+import com.garbri.proigo.core.menu.PauseMenuOverlay;
 import com.garbri.proigo.core.menu.PauseMenuScreen;
 import com.garbri.proigo.core.networking.client.GameClient;
 import com.garbri.proigo.core.networking.server.GameServer;
@@ -23,6 +28,7 @@ import com.garbri.proigo.core.screens.TeamSelectScreen;
 import com.garbri.proigo.core.screens.NetworkedSoccerScreen;
 import com.garbri.proigo.core.screens.RaceScreen;
 import com.garbri.proigo.core.screens.SoccerScreen;
+import com.garbri.proigo.core.utilities.MusicHelper;
 
 public class AdventureBall extends Game {
 
@@ -34,6 +40,8 @@ public class AdventureBall extends Game {
     
     public PauseMenuScreen pauseMenu;
     public MainMenuScreen mainMenu;
+    
+    public PauseMenuOverlay pauseOverlay;
 
     //Number of players;
     public ArrayList<Player> players;
@@ -47,10 +55,14 @@ public class AdventureBall extends Game {
     public Screen activeScreen;
     
     public MenuInputsHelper menuInputs;
+    
+    public Music music;
 
     @Override
     public void create() {
-
+    	
+    	this.music = MusicHelper.playMenuMusic(music);
+    	
     	this.menuInputs = new MenuInputsHelper(this);
     	
         this.initilizeControls();
@@ -75,6 +87,8 @@ public class AdventureBall extends Game {
         networkedSoccerScreen = new NetworkedSoccerScreen(this);
         
         //Init Menu Screens
+        
+        createPauseMenu();
         pauseMenu = new PauseMenuScreen(this);
         mainMenu = new MainMenuScreen(this);
         
@@ -169,5 +183,19 @@ public class AdventureBall extends Game {
     public ArrayList<IControls> getControllers()
     {
     	return this.controls;
+    }
+    
+    private void createPauseMenu()
+    {
+    	ArrayList<PauseMenuItem> items = new ArrayList<PauseMenuItem>();
+    	
+
+    	items.add(new PauseMenuItem(MenuOptionConstants.RESUME, pauseMenuOption.resume));
+    	items.add(new PauseMenuItem(MenuOptionConstants.TEAMSELECT, pauseMenuOption.teamSelect));
+    	items.add(new PauseMenuItem(MenuOptionConstants.CONTROLS, pauseMenuOption.controls));
+    	items.add(new PauseMenuItem(MenuOptionConstants.SOUND, pauseMenuOption.sound));
+    	items.add(new PauseMenuItem(MenuOptionConstants.QUIT, pauseMenuOption.quit));
+    	
+    	pauseOverlay = new PauseMenuOverlay(this, items);
     }
 }
