@@ -12,9 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.garbri.proigo.core.AdventureBall;
 import com.garbri.proigo.core.menu.MenuOptionConstants.pauseMenuOption;
 import com.garbri.proigo.core.menu.PauseMenuItem.optionType;
+import com.garbri.proigo.core.screens.TitleScreen;
 import com.garbri.proigo.core.utilities.SpriteHelper;
 
-public class PauseMenuOverlay {
+public class MenuOverlay {
 	
 	private AdventureBall game;
 	private BitmapFont optionsFont;
@@ -40,7 +41,7 @@ public class PauseMenuOverlay {
 	private float menuOptionsX;
 	private float menuOptionsY;
 	
-	public PauseMenuOverlay (AdventureBall game, ArrayList<PauseMenuItem> menuItems)
+	public MenuOverlay (AdventureBall game, ArrayList<PauseMenuItem> menuItems)
 	{
 		this.game = game;
 		
@@ -118,11 +119,14 @@ public class PauseMenuOverlay {
 	{
 		if(this.game.menuInputs.enterPressed)
         {
-			//Only intesrested in enters if it is a link type
-			if(this.menuItems.get(this.selectedOption).type == optionType.link)
-			{
-				handleLinks();
-			}
+			if(this.movementCoolDown <= 0f)
+        	{
+				//Only intesrested in enters if it is a link type
+				if(this.menuItems.get(this.selectedOption).type == optionType.link)
+				{
+					handleLinks();
+				}
+        	}
         }
         else if(this.game.menuInputs.escapePressed)
         {
@@ -214,7 +218,14 @@ public class PauseMenuOverlay {
 					break;
 				case sound:
 					configureSound();
-					break;				
+					break;
+				case credits:
+					break;
+				case exit:
+					break;
+				case start:
+					goToTeamSelect();
+					break;
 					
 			}
 		}
@@ -236,16 +247,25 @@ public class PauseMenuOverlay {
 		this.movementCoolDown =  MenuOptionConstants.slowDownTimer;
 	}
 	
+	public void activateCoolDown()
+	{
+		this.pauseCoolDown = MenuOptionConstants.slowDownTimer;
+		this.pauseCoolDownActive = true;
+	}
+	
 	private void quitToMenu()
 	{
 		closeMenu();
-		this.game.setScreen(this.game.mainMenu);
+		this.game.setScreen(this.game.titleScreen);
 	}
 	
 	private void goToTeamSelect()
 	{
 		closeMenu();
-		this.game.setScreen(this.game.controllerSelectScreen);
+		if(this.game.getScreen() != this.game.controllerSelectScreen)
+		{
+			this.game.setScreen(this.game.controllerSelectScreen);
+		}
 	}
 	
 	private void displayControls()

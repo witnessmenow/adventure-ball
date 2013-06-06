@@ -14,13 +14,11 @@ import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
 import com.garbri.proigo.core.controls.OuyaListener;
 import com.garbri.proigo.core.controls.XboxListener;
-import com.garbri.proigo.core.menu.MainMenuScreen;
 import com.garbri.proigo.core.menu.MenuInputsHelper;
 import com.garbri.proigo.core.menu.MenuOptionConstants;
 import com.garbri.proigo.core.menu.MenuOptionConstants.pauseMenuOption;
 import com.garbri.proigo.core.menu.PauseMenuItem;
-import com.garbri.proigo.core.menu.PauseMenuOverlay;
-import com.garbri.proigo.core.menu.PauseMenuScreen;
+import com.garbri.proigo.core.menu.MenuOverlay;
 import com.garbri.proigo.core.networking.client.GameClient;
 import com.garbri.proigo.core.networking.server.GameServer;
 import com.garbri.proigo.core.objects.Player;
@@ -28,6 +26,7 @@ import com.garbri.proigo.core.screens.TeamSelectScreen;
 import com.garbri.proigo.core.screens.NetworkedSoccerScreen;
 import com.garbri.proigo.core.screens.RaceScreen;
 import com.garbri.proigo.core.screens.SoccerScreen;
+import com.garbri.proigo.core.screens.TitleScreen;
 import com.garbri.proigo.core.utilities.MusicHelper;
 
 public class AdventureBall extends Game {
@@ -38,10 +37,10 @@ public class AdventureBall extends Game {
     
     public TeamSelectScreen controllerSelectScreen;
     
-    public PauseMenuScreen pauseMenu;
-    public MainMenuScreen mainMenu;
+    public TitleScreen titleScreen;
     
-    public PauseMenuOverlay pauseOverlay;
+    public MenuOverlay pauseOverlay;
+    public MenuOverlay mainMenuOverlay;
 
     //Number of players;
     public ArrayList<Player> players;
@@ -57,9 +56,13 @@ public class AdventureBall extends Game {
     public MenuInputsHelper menuInputs;
     
     public Music music;
+    
+    public boolean isOuya;
 
     @Override
     public void create() {
+    	
+    	this.isOuya = Ouya.runningOnOuya;
     	
     	this.music = MusicHelper.playMenuMusic(music);
     	
@@ -87,14 +90,13 @@ public class AdventureBall extends Game {
         networkedSoccerScreen = new NetworkedSoccerScreen(this);
         
         //Init Menu Screens
-        
+        this.titleScreen = new TitleScreen(this);
         createPauseMenu();
-        pauseMenu = new PauseMenuScreen(this);
-        mainMenu = new MainMenuScreen(this);
+        createMainMenu();
         
         controllerSelectScreen = new TeamSelectScreen(this);
         
-        setScreen(mainMenu);
+        setScreen(titleScreen);
     }
 
     private void createPlayers(int numberOfPlayers) {
@@ -156,7 +158,7 @@ public class AdventureBall extends Game {
         for (Controller controller : Controllers.getControllers()) {
             Gdx.app.log("Main", controller.getName());
             //if(Ouya.ID.equals(controller.getName()))
-            if(Ouya.runningOnOuya)
+            if(this.isOuya)
             {
             	Gdx.app.log("Main", "Added Listener for Ouya Controller");
             	
@@ -196,6 +198,19 @@ public class AdventureBall extends Game {
     	items.add(new PauseMenuItem(MenuOptionConstants.SOUND, pauseMenuOption.sound));
     	items.add(new PauseMenuItem(MenuOptionConstants.QUIT, pauseMenuOption.quit));
     	
-    	pauseOverlay = new PauseMenuOverlay(this, items);
+    	pauseOverlay = new MenuOverlay(this, items);
+    }
+    
+    private void createMainMenu()
+    {
+    	ArrayList<PauseMenuItem> items = new ArrayList<PauseMenuItem>();
+    	
+
+    	items.add(new PauseMenuItem(MenuOptionConstants.START, pauseMenuOption.start));
+    	items.add(new PauseMenuItem(MenuOptionConstants.CREDITS, pauseMenuOption.credits));
+    	items.add(new PauseMenuItem(MenuOptionConstants.SOUND, pauseMenuOption.sound));
+    	items.add(new PauseMenuItem(MenuOptionConstants.EXIT, pauseMenuOption.exit));
+    	
+    	mainMenuOverlay = new MenuOverlay(this, items);
     }
 }

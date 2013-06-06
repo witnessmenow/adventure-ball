@@ -85,51 +85,82 @@ public class TeamSelectScreen implements Screen{
 	@Override
 	public void render(float delta) {
 		
-		Gdx.gl.glClearColor(0, 0f, 0f, 1);
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        
-        // tell the camera to update its matrices.
-        camera.update();
-        spriteBatch.setProjectionMatrix(camera.combined);
-        
-        this.timer.progressTime();
-        
-        world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
+		this.game.menuInputs.checkForInputs();
 
-        world.clearForces();
-        
-        if(this.timer.elapsedTimeInSeconds > 1)
-        {
-        	checkForInputs();
-        }
-        
-        for (Vehicle vehicle : this.vehicles) {
-            vehicle.controlVehicle();
-        }
-        
-        this.area.checkTeams(vehicles);
-        
-        this.spriteBatch.begin();
-        
-        
-        this.font.setColor(1f, 1f, 1f, 1.0f);
-        this.font.draw(spriteBatch, "Join A Team!", this.screenWidth/2 - 110, this.screenHeight - 50);
-        
-        this.area.displayNumbersInTeam(font, spriteBatch);
-        
-        for (Vehicle vehicle : this.vehicles) {
-            vehicle.updateSprite(spriteBatch, PIXELS_PER_METER);
-        }
-        this.spriteBatch.end();
-        
-        
-        
-        debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
+		if(!this.game.pauseOverlay.pauseMenuActive)
+	    {
+			if (this.game.pauseOverlay.pauseCoolDownActive)
+			{
+				this.game.pauseOverlay.reduceCoolDown(delta);
+			}
+			else if (this.game.menuInputs.escapePressed)
+	        {
+				this.game.pauseOverlay.attemptToPause();
+	        }
+		
+			Gdx.gl.glClearColor(0, 0f, 0f, 1);
+	        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	        
+	        // tell the camera to update its matrices.
+	        camera.update();
+	        spriteBatch.setProjectionMatrix(camera.combined);
+	        
+	        this.timer.progressTime();
+	        
+	        world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
 	
-        if(this.gotReadyFlag)
-        {
-        	startGame();
-        }
+	        world.clearForces();
+	        
+	        if(this.timer.elapsedTimeInSeconds > 1)
+	        {
+	        	checkForInputs();
+	        }
+	        
+	        for (Vehicle vehicle : this.vehicles) {
+	            vehicle.controlVehicle();
+	        }
+	        
+	        this.area.checkTeams(vehicles);
+	        
+	        this.spriteBatch.begin();
+	        
+	        
+	        this.font.setColor(1f, 1f, 1f, 1.0f);
+	        this.font.draw(spriteBatch, "Join A Team!", this.screenWidth/2 - 110, this.screenHeight - 50);
+	        
+	        this.area.displayNumbersInTeam(font, spriteBatch);
+	        
+	        for (Vehicle vehicle : this.vehicles) {
+	            vehicle.updateSprite(spriteBatch, PIXELS_PER_METER);
+	        }
+	        this.spriteBatch.end();
+	        
+	        
+	        
+	        debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
+		
+	        if(this.gotReadyFlag)
+	        {
+	        	startGame();
+	        }
+	    }
+		else
+		{
+			//Pause menu is active 
+			
+			this.spriteBatch.begin();
+			
+			this.game.pauseOverlay.renderMenuScreen(delta, spriteBatch);
+			
+			this.spriteBatch.end();
+			
+			if(!this.game.pauseOverlay.pauseMenuActive)
+			{
+				//Game is about to resume
+				
+				this.timer.resumeTimer();
+			}
+		}
 	}
 
 	@Override
@@ -183,6 +214,8 @@ public class TeamSelectScreen implements Screen{
 		
 		this.gotReadyFlag = false;
 		
+		this.game.pauseOverlay.setScreenCenter(center, PIXELS_PER_METER);
+		
 		spriteBatch = new SpriteBatch();
 
         world = new World(new Vector2(0.0f, 0.0f), true);
@@ -210,11 +243,6 @@ public class TeamSelectScreen implements Screen{
 					{
 						addControlsToVehicle(cont);
 					}
-					
-					if (((GamePadControls) cont).getStart())
-					{
-						this.gotReadyFlag = true;
-					}
 				}	
 				else if (cont instanceof KeyboardControls)
 				{
@@ -223,12 +251,7 @@ public class TeamSelectScreen implements Screen{
 					if(Gdx.input.isKeyPressed(keyCont.controlUp))
 					{
 						addControlsToVehicle(cont);
-					} 
-					
-					if(Gdx.input.isKeyPressed(keyCont.enter))
-					{
-						this.gotReadyFlag = true;
-					} 
+					}  
 	
 				}
 			}
@@ -246,10 +269,14 @@ public class TeamSelectScreen implements Screen{
 				{
 					KeyboardControls keyCont = (KeyboardControls)cont;
 					
-					if(Gdx.input.isKeyPressed(keyCont.enter))
+					//If keyboard exited menu they pressed enter for that
+					if(!this.game.pauseOverlay.pauseCoolDownActive)
 					{
-						this.gotReadyFlag = true;
-					} 
+						if(Gdx.input.isKeyPressed(keyCont.enter))
+						{
+							this.gotReadyFlag = true;
+						}
+					}
 	
 				}
 				

@@ -102,102 +102,127 @@ public class SoccerScreen extends ScreenDebug {
         //this.checkDebugInput(this.game);
     	
     	this.game.menuInputs.checkForInputs();
+
+		if(!this.game.pauseOverlay.pauseMenuActive)
+	    {
+			if (this.game.pauseOverlay.pauseCoolDownActive)
+			{
+				this.game.pauseOverlay.reduceCoolDown(delta);
+			}
+			else if (this.game.menuInputs.escapePressed)
+	        {
+				this.game.pauseOverlay.attemptToPause();
+	        }
     	
-		if (this.game.menuInputs.escapePressed)
-        {
-			this.game.setScreen(this.game.pauseMenu);
-        }
-    	
-        Gdx.gl.glClearColor(0, 0.5f, 0.05f, 1);
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-        // tell the camera to update its matrices.
-        camera.update();
-
-        this.timer.progressTime();
-
-        spriteBatch.setProjectionMatrix(camera.combined);
-
-        if (this.timer.countDownTimer == 0) {
-            for (Vehicle vehicle : this.vehicles) {
-                vehicle.controlVehicle();
-            }
-        }
-
-        this.ball.update();
-
-        Vector2 ballLocation = this.ball.getLocation();
-
-        if (!displayWinMessage) {
-            if (this.pitch.leftGoal.checkForGoal(ballLocation, 0f)) {
-                this.displayWinMessage = true;
-                this.winMessage = "RED TEAM SCORED!!";
-                this.redTeamScore++;
-                this.timer.startCountDown(3);
-            } else if (this.pitch.rightGoal.checkForGoal(ballLocation, 0f)) {
-                this.displayWinMessage = true;
-                this.winMessage = "BLUE TEAM SCORED!!";
-                this.blueTeamScore++;
-                this.timer.startCountDown(3);
-            }
-        }
-
-
-        /**
-         * Have box2d update the positions and velocities (and etc) of all
-         * tracked objects. The second and third argument specify the number of
-         * iterations of velocity and position tests to perform -- higher is
-         * more accurate but is also slower.
-         */
-        world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
-
-        world.clearForces();
-
-        this.spriteBatch.begin();
-        //Update Player/Car 1
-
-        this.pitchSprite.setPosition(0, 0);
-        this.pitchSprite.draw(spriteBatch);
-
-        for (Vehicle vehicle : this.vehicles) {
-            vehicle.updateSprite(spriteBatch, PIXELS_PER_METER);
-        }
-
-        String blueTeamString = String.valueOf(this.blueTeamScore);
-        String redTeamString = String.valueOf(this.redTeamScore);
-
-        textDisplayer.font.draw(spriteBatch, blueTeamString, (center.x / 2 * PIXELS_PER_METER) - (blueTeamString.length() * 3), (worldHeight - 5f) * PIXELS_PER_METER);
-        textDisplayer.font.draw(spriteBatch, redTeamString, ((3 * center.x / 2) * PIXELS_PER_METER) - (redTeamString.length() * 3), (worldHeight - 5f) * PIXELS_PER_METER);
-
-        //Update Ball
-        SpriteHelper.updateSprite(ball.sprite, spriteBatch, PIXELS_PER_METER, ball.body);
-
-        if (this.displayWinMessage) {
-            textDisplayer.font.draw(spriteBatch, this.winMessage, (center.x * PIXELS_PER_METER) - (this.winMessage.length() * 3), center.y * PIXELS_PER_METER);
-
-            if (this.timer.countDownTimer == 0) {
-                this.game.setScreen(this.game.raceScreen);
-            }
-        }
-
-        this.spriteBatch.end();
-
-        if (this.game.gameServer != null) {
-            this.game.gameServer.updateGame(this.ball.body.getPosition());
-        }
-
-        /**
-         * Draw this last, so we can see the collision boundaries on top of the
-         * sprites and map.
-         */
-        //debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
-
+	        Gdx.gl.glClearColor(0, 0.5f, 0.05f, 1);
+	        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	
+	        // tell the camera to update its matrices.
+	        camera.update();
+	
+	        this.timer.progressTime();
+	
+	        spriteBatch.setProjectionMatrix(camera.combined);
+	
+	        if (this.timer.countDownTimer == 0) {
+	            for (Vehicle vehicle : this.vehicles) {
+	                vehicle.controlVehicle();
+	            }
+	        }
+	
+	        this.ball.update();
+	
+	        Vector2 ballLocation = this.ball.getLocation();
+	
+	        if (!displayWinMessage) {
+	            if (this.pitch.leftGoal.checkForGoal(ballLocation, 0f)) {
+	                this.displayWinMessage = true;
+	                this.winMessage = "RED TEAM SCORED!!";
+	                this.redTeamScore++;
+	                this.timer.startCountDown(3);
+	            } else if (this.pitch.rightGoal.checkForGoal(ballLocation, 0f)) {
+	                this.displayWinMessage = true;
+	                this.winMessage = "BLUE TEAM SCORED!!";
+	                this.blueTeamScore++;
+	                this.timer.startCountDown(3);
+	            }
+	        }
+	
+	
+	        /**
+	         * Have box2d update the positions and velocities (and etc) of all
+	         * tracked objects. The second and third argument specify the number of
+	         * iterations of velocity and position tests to perform -- higher is
+	         * more accurate but is also slower.
+	         */
+	        world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
+	
+	        world.clearForces();
+	
+	        this.spriteBatch.begin();
+	        //Update Player/Car 1
+	
+	        this.pitchSprite.setPosition(0, 0);
+	        this.pitchSprite.draw(spriteBatch);
+	
+	        for (Vehicle vehicle : this.vehicles) {
+	            vehicle.updateSprite(spriteBatch, PIXELS_PER_METER);
+	        }
+	
+	        String blueTeamString = String.valueOf(this.blueTeamScore);
+	        String redTeamString = String.valueOf(this.redTeamScore);
+	
+	        textDisplayer.font.draw(spriteBatch, blueTeamString, (center.x / 2 * PIXELS_PER_METER) - (blueTeamString.length() * 3), (worldHeight - 5f) * PIXELS_PER_METER);
+	        textDisplayer.font.draw(spriteBatch, redTeamString, ((3 * center.x / 2) * PIXELS_PER_METER) - (redTeamString.length() * 3), (worldHeight - 5f) * PIXELS_PER_METER);
+	
+	        //Update Ball
+	        SpriteHelper.updateSprite(ball.sprite, spriteBatch, PIXELS_PER_METER, ball.body);
+	
+	        if (this.displayWinMessage) {
+	            textDisplayer.font.draw(spriteBatch, this.winMessage, (center.x * PIXELS_PER_METER) - (this.winMessage.length() * 3), center.y * PIXELS_PER_METER);
+	
+	            if (this.timer.countDownTimer == 0) {
+	                this.game.setScreen(this.game.raceScreen);
+	            }
+	        }
+	
+	        this.spriteBatch.end();
+	
+	        if (this.game.gameServer != null) {
+	            this.game.gameServer.updateGame(this.ball.body.getPosition());
+	        }
+	
+	        /**
+	         * Draw this last, so we can see the collision boundaries on top of the
+	         * sprites and map.
+	         */
+	        //debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,PIXELS_PER_METER));
+	    }
+		else
+		{
+			//Pause menu is active 
+			
+			this.spriteBatch.begin();
+			
+			this.game.pauseOverlay.renderMenuScreen(delta, spriteBatch);
+			
+			this.spriteBatch.end();
+			
+			if(!this.game.pauseOverlay.pauseMenuActive)
+			{
+				//Game is about to resume
+				
+				this.timer.resumeTimer();
+			}
+		}
     }
 
     @Override
     public void show() {
     	
     	this.game.activeScreen = this;
+    	
+    	this.game.pauseOverlay.setScreenCenter(center, PIXELS_PER_METER);
 
         spriteBatch = new SpriteBatch();
 
