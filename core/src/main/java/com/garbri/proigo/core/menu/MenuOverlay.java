@@ -222,6 +222,7 @@ public class MenuOverlay {
 				case credits:
 					break;
 				case exit:
+					exitGame();
 					break;
 				case start:
 					goToTeamSelect();
@@ -266,6 +267,13 @@ public class MenuOverlay {
 		{
 			this.game.setScreen(this.game.controllerSelectScreen);
 		}
+	}
+	
+	private void exitGame()
+	{
+		
+		//TODO: At some stage an are you sure prompt should be added
+		Gdx.app.exit();
 	}
 	
 	private void displayControls()
