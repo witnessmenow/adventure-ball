@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,6 +48,9 @@ public class TeamSelectScreen implements Screen{
 	    
 	    private SpriteHelper spriteHelper;
 	    
+	    private Sprite controllerSprite;
+	    private Sprite textOverlaySprite;
+	    
 	    private AdventureBall game;
 	    
 	    private TeamSelectArea area;
@@ -80,7 +84,16 @@ public class TeamSelectScreen implements Screen{
         this.font = new BitmapFont(Gdx.files.internal("Fonts/Const-50.fnt"), Gdx.files.internal("Fonts/Const-50.png"), false);
 
         this.vehicles = new ArrayList<Car>();
+        
+        this.controllerSprite = this.spriteHelper.loadControllerSprite();
+        this.textOverlaySprite = this.spriteHelper.loadOverlaySprite();
+        
+        this.controllerSprite = this.spriteHelper.setPositionAdjusted(this.screenWidth/2, 3*(this.screenHeight/4), this.controllerSprite);
+        this.textOverlaySprite = this.spriteHelper.setPositionAdjusted(this.screenWidth/2, 3*(this.screenHeight/4), this.textOverlaySprite);
 	}
+	
+
+	
 	    
 	@Override
 	public void render(float delta) {
@@ -124,9 +137,14 @@ public class TeamSelectScreen implements Screen{
 	        
 	        this.spriteBatch.begin();
 	        
+	        this.controllerSprite.draw(spriteBatch);
+	        this.textOverlaySprite.draw(spriteBatch);
 	        
 	        this.font.setColor(1f, 1f, 1f, 1.0f);
-	        this.font.draw(spriteBatch, "Join A Team!", this.screenWidth/2 - 110, this.screenHeight - 50);
+	        
+	        String message = "Join A Team!";
+	        
+	        this.font.draw(spriteBatch, message, this.screenWidth/2 - this.font.getBounds(message).width/2, this.screenHeight/4);
 	        
 	        this.area.displayNumbersInTeam(font, spriteBatch);
 	        

@@ -147,6 +147,22 @@ public class SpriteHelper {
 				);
 	}
 	
+	public Sprite loadControllerSprite()
+	{
+		return new Sprite(new Texture(Gdx.files.internal("Images/Controls/Ouya/controller.png")));
+	}
+	
+	public Sprite loadOverlaySprite()
+	{
+		return new Sprite(new Texture(Gdx.files.internal("Images/Controls/Ouya/textOverlay.png")));
+	}
+	
+	public Sprite setPositionAdjusted(float x, float y , Sprite sp)
+	{
+		sp.setPosition(x - (sp.getWidth()/2), y - (sp.getHeight()/2));
+		return sp;
+	}
+	
 	
 	
 }
