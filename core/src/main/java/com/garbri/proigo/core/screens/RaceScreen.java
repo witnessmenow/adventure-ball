@@ -120,6 +120,7 @@ private OrthographicCamera camera;
 		Car tempCar;
 		
 		this.vehicles.clear();
+		spriteHelper.resetAvailableSprites();
 		
 		for( int i = 0; i < this.game.players.size(); i++)
 		{
@@ -128,7 +129,7 @@ private OrthographicCamera camera;
 								this.world, 
 								this.maze.getPlayerStartPoint(i), 
 								this.maze.getPlayerStartAngle(i),
-								spriteHelper.getTeamCarSprite(i, this.game.players.get(i).playerTeam),
+								spriteHelper.getTeamCarSprite(this.game.players.get(i).playerTeam),
 								spriteHelper.getWheelSprite());
 			
 			this.vehicles.add(tempCar);

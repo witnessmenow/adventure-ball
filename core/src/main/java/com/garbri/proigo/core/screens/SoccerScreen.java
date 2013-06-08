@@ -260,6 +260,7 @@ public class SoccerScreen extends ScreenDebug {
     private void createAllCars() {
         Car tempCar;
         this.vehicles.clear();
+        spriteHelper.resetAvailableSprites();
 
         for (int i = 0; i < this.game.players.size(); i++) {
             tempCar = new Car(this.game.players.get(i).controls,
@@ -267,7 +268,7 @@ public class SoccerScreen extends ScreenDebug {
                     this.world,
                     this.pitch.getTeamStartPoint(this.game.players.get(i).playerTeam, i),
                     this.pitch.getTeamStartAngle(this.game.players.get(i).playerTeam),
-                    spriteHelper.getTeamCarSprite(i, this.game.players.get(i).playerTeam),
+                    spriteHelper.getTeamCarSprite(this.game.players.get(i).playerTeam),
                     spriteHelper.getWheelSprite());
 
             this.vehicles.add(tempCar);

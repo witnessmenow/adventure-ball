@@ -327,6 +327,7 @@ public class TeamSelectScreen implements Screen{
 		Car tempCar;
 		
 		this.vehicles.clear();
+		spriteHelper.resetAvailableSprites();
 			
 		for( int i = 0; i < 4; i++)
 		{
