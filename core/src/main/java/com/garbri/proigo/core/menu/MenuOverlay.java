@@ -31,6 +31,8 @@ public class MenuOverlay {
 	
 	public boolean pauseMenuActive;
 	
+	private SpriteHelper spriteHelper;
+	
 	private float movementCoolDown = 0f;
 	private float pauseCoolDown = 0f;
 	
@@ -41,15 +43,23 @@ public class MenuOverlay {
 	private float menuOptionsX;
 	private float menuOptionsY;
 	
+	private boolean creditsVisible;
+	private Sprite creditsBgSprite;
+	private Sprite creditsTextSprite;
+	
 	public MenuOverlay (AdventureBall game, ArrayList<PauseMenuItem> menuItems)
 	{
 		this.game = game;
+		
+		this.spriteHelper = new SpriteHelper();
 		
 		initializeFont();
 		
 		this.menuBackground = loadMenuSprite();
 		
 		this.menuItems = menuItems;
+		
+		creditsVisible = false;
 		
 		
 		
@@ -98,10 +108,39 @@ public class MenuOverlay {
         {
         	this.movementCoolDown -= delta;
         }
-        processInputs();
+        
+        if(this.creditsVisible)
+        {
+        	this.creditsBgSprite.draw(spriteBatch);
+        	this.creditsTextSprite.draw(spriteBatch);
+        	
+        	if(this.movementCoolDown <= 0f)
+    		{
+        		if(checkForBackOrEnter())
+        		{
+        			closeCredits();
+        		}
+    		}
+        	
+        }
+        else
+        {
+        	processInputs();
+        }
     
         
         
+	}
+	
+	private boolean checkForBackOrEnter()
+	{
+		return (this.game.menuInputs.escapePressed || this.game.menuInputs.enterPressed);
+	}
+	
+	private void closeCredits()
+	{
+		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
+		this.creditsVisible = false;
 	}
 	
 	private void processInputs()
@@ -220,6 +259,7 @@ public class MenuOverlay {
 					configureSound();
 					break;
 				case credits:
+					showCredits();
 					break;
 				case exit:
 					exitGame();
@@ -239,6 +279,18 @@ public class MenuOverlay {
 		this.movementCoolDown =  MenuOptionConstants.slowDownTimer;
 		this.pauseCoolDown = MenuOptionConstants.slowDownTimer;
 		this.pauseCoolDownActive = true;
+	}
+	
+	private void showCredits()
+	{
+		creditsVisible = true;
+		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
+		
+		this.creditsBgSprite = this.spriteHelper.loadCreditsBgSprite();
+		this.creditsBgSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.creditsBgSprite);
+		
+		this.creditsTextSprite = this.spriteHelper.loadCreditsTextSprite();
+		this.creditsTextSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.creditsTextSprite);
 	}
 	
 	private void closeMenu()
@@ -303,6 +355,8 @@ public class MenuOverlay {
 		this.pauseMenuActive = true;
 		this.movementCoolDown =  MenuOptionConstants.slowDownTimer;
 		this.selectedOption = 0;
+		
+		creditsVisible = false;
 	}
 	
 }

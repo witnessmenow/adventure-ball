@@ -164,5 +164,15 @@ public class SpriteHelper {
 	}
 	
 	
+	public Sprite loadCreditsBgSprite()
+	{
+		return new Sprite(new Texture(Gdx.files.internal("Images/creditsBg.png")));
+	}
+	
+	public Sprite loadCreditsTextSprite()
+	{
+		return new Sprite(new Texture(Gdx.files.internal("Images/creditsText.png")));
+	}
+	
 	
 }
