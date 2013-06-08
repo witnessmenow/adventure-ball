@@ -26,6 +26,9 @@ public class Maze
 	private float worldWidth;
 	private float worldHeight;
 	
+	private boolean nextBlueBottom;
+	private boolean nextRedTop;
+	
 	
 	
 	
@@ -35,6 +38,7 @@ public class Maze
 		
 		this.numberOfInnerWalls = numInnerWalls;
 		
+		resetStartingPositions();
 
 		
 		this.winBoxSize = worldHeight/(numberOfInnerWalls + 1);
@@ -55,12 +59,52 @@ public class Maze
 		
 	}
 	
-	public Vector2 getPlayerStartPoint(int playerNumber)
+	public void resetStartingPositions()
 	{
-		//Only two staritng spaces but we want to alternate
-		int temp = playerNumber%4;
+		nextBlueBottom = true;
+		nextRedTop = true;
 		
-		if (temp == 0 || temp == 3)
+	}
+	
+	public StartingPosition getPlayerStartingPosition(Player.team team)
+	{
+		boolean top = false;
+		
+		switch(team)
+		{
+		case blue:
+			if(nextBlueBottom)
+			{
+				nextBlueBottom = false;
+				top = false;
+			}
+			else
+			{
+				nextBlueBottom = true;
+				top = true;
+			}
+			break;
+		case red:
+			if(nextRedTop)
+			{
+				nextRedTop = false;
+				top = true;
+			}
+			else
+			{
+				nextRedTop = true;
+				top = false;
+			}
+			break;
+		}
+		
+		
+		return new StartingPosition(getPlayerStartPoint(top), getPlayerStartAngle(top));
+	}
+	
+	public Vector2 getPlayerStartPoint(boolean top)
+	{	
+		if (!top)
 		{
 			return new Vector2 (gapFromOuterEdge + playerGapX , gapFromOuterEdge + playerGapY);
 		}
@@ -70,12 +114,9 @@ public class Maze
 		}
 	}
 	
-	public float getPlayerStartAngle(int playerNumber)
-	{
-		//Only two staritng spaces but we want to alternate
-		int temp = playerNumber%4;
-		
-		if (temp == 0 || temp == 3)
+	public float getPlayerStartAngle(boolean top)
+	{	
+		if (!top)
 		{
 			return (float) Math.PI/2;
 		}

@@ -17,6 +17,7 @@ import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.ScreenDebug;
 import com.garbri.proigo.core.objects.Ball;
 import com.garbri.proigo.core.objects.Maze;
+import com.garbri.proigo.core.objects.StartingPosition;
 import com.garbri.proigo.core.utilities.SpriteHelper;
 import com.garbri.proigo.core.utilities.TextDisplayHelper;
 import com.garbri.proigo.core.utilities.TimerHelper;
@@ -121,14 +122,17 @@ private OrthographicCamera camera;
 		
 		this.vehicles.clear();
 		spriteHelper.resetAvailableSprites();
+		this.maze.resetStartingPositions();
 		
 		for( int i = 0; i < this.game.players.size(); i++)
 		{
+			StartingPosition startingPos = this.maze.getPlayerStartingPosition(this.game.players.get(i).playerTeam);
+			
 			tempCar = new Car(	this.game.players.get(i).controls,
             					this.game.players.get(i), 
 								this.world, 
-								this.maze.getPlayerStartPoint(i), 
-								this.maze.getPlayerStartAngle(i),
+								startingPos.startingCoords, 
+								startingPos.startingAngle,
 								spriteHelper.getTeamCarSprite(this.game.players.get(i).playerTeam),
 								spriteHelper.getWheelSprite());
 			
