@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.garbri.proigo.core.AdventureBall;
+import com.garbri.proigo.core.collision.CollisionHelper;
 import com.garbri.proigo.core.controls.ScreenDebug;
 import com.garbri.proigo.core.objects.Ball;
 import com.garbri.proigo.core.objects.Pitch;
@@ -227,6 +228,9 @@ public class SoccerScreen extends ScreenDebug {
         spriteBatch = new SpriteBatch();
 
         world = new World(new Vector2(0.0f, 0.0f), true);
+        
+        world.setContactListener(new CollisionHelper());
+        
         this.pitch = new Pitch(world, worldWidth, worldHeight, center);
         this.ball = new Ball(world, center.x + this.ballOffsetX, center.y, spriteHelper.getBallSprite());
 

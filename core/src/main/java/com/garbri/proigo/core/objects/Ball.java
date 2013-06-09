@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.garbri.proigo.core.collision.CollisionInfo;
+import com.garbri.proigo.core.collision.CollisionInfo.CollisionObjectType;
 
 public class Ball {
 	
@@ -41,8 +43,11 @@ public class Ball {
 	    fixtureDef.shape = dynamicCircle;  
 	    fixtureDef.density = 0.25f;  
 	    fixtureDef.friction = 0f;  
-	    fixtureDef.restitution = 1f;  
-	    this.body.createFixture(fixtureDef); 
+	    fixtureDef.restitution = 1f;
+	    
+	    this.body.createFixture(fixtureDef);
+	    
+	    this.body.setUserData(new CollisionInfo("Ball", CollisionObjectType.ball));
 	    
 	    this.sprite = ballSprite;
 	}

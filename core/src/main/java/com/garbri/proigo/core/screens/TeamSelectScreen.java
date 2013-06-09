@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.garbri.proigo.core.AdventureBall;
+import com.garbri.proigo.core.collision.CollisionHelper;
 import com.garbri.proigo.core.controls.GamePadControls;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
@@ -237,6 +238,8 @@ public class TeamSelectScreen implements Screen{
 		spriteBatch = new SpriteBatch();
 
         world = new World(new Vector2(0.0f, 0.0f), true);
+        
+        world.setContactListener(new CollisionHelper());
         
         this.area = new TeamSelectArea(world, worldWidth, worldHeight, center);
 		
