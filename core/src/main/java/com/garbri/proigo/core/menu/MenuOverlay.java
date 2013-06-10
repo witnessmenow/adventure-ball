@@ -47,6 +47,11 @@ public class MenuOverlay {
 	private Sprite creditsBgSprite;
 	private Sprite creditsTextSprite;
 	
+	private boolean controlsVisible;
+	private Sprite controlsBgSprite;
+	private Sprite controlsImageSprite;
+	private Sprite controlsTextSprite;
+	
 	public MenuOverlay (AdventureBall game, ArrayList<PauseMenuItem> menuItems)
 	{
 		this.game = game;
@@ -123,6 +128,20 @@ public class MenuOverlay {
     		}
         	
         }
+        else if (this.controlsVisible)
+        {
+        	this.controlsBgSprite.draw(spriteBatch);
+        	this.controlsImageSprite.draw(spriteBatch);
+        	this.controlsTextSprite.draw(spriteBatch);
+        	
+        	if(this.movementCoolDown <= 0f)
+    		{
+        		if(checkForBackOrEnter())
+        		{
+        			closeControls();
+        		}
+    		}
+        }
         else
         {
         	processInputs();
@@ -139,8 +158,15 @@ public class MenuOverlay {
 	
 	private void closeCredits()
 	{
+
 		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
 		this.creditsVisible = false;
+	}
+	
+	private void closeControls()
+	{
+		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
+		this.controlsVisible = false;
 	}
 	
 	private void processInputs()
@@ -330,7 +356,17 @@ public class MenuOverlay {
 	
 	private void displayControls()
 	{
+		this.controlsVisible = true;
+		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
 		
+		this.controlsBgSprite = this.spriteHelper.loadCreditsBgSprite();
+		this.controlsBgSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.controlsBgSprite);
+		
+		this.controlsImageSprite = this.spriteHelper.loadControllerSprite();
+		this.controlsImageSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.controlsImageSprite);
+		
+		this.controlsTextSprite = this.spriteHelper.loadOverlaySprite();
+		this.controlsTextSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.controlsTextSprite);
 	}
 	
 	private void configureSound()
