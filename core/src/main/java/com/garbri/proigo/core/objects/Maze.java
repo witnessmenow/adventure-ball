@@ -66,7 +66,7 @@ public class Maze
 		
 	}
 	
-	public StartingPosition getPlayerStartingPosition(Player.team team)
+	public StartingPosition getPlayerStartingPosition(Player.Team team)
 	{
 		boolean top = false;
 		

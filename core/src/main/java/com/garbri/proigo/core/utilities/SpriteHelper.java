@@ -69,7 +69,7 @@ public class SpriteHelper {
 		return new Sprite(carTexture,(20*colour),0,20, 40);
 	}
 	
-	public Sprite getTeamCarSprite(Player.team team)
+	public Sprite getTeamCarSprite(Player.Team team)
 	{
 		int row = 1;
 		

@@ -11,6 +11,7 @@ import com.garbri.proigo.core.collision.CollisionInfo;
 import com.garbri.proigo.core.collision.CollisionInfo.CollisionObjectType;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.objects.Player;
+import com.garbri.proigo.core.objects.Player.Team;
 import com.garbri.proigo.core.objects.Wheel;
 
 public class Car extends Vehicle {
@@ -59,12 +60,14 @@ public class Car extends Vehicle {
 		
 		
 		String collisionText = "";
+		Team team = null;
 		if(player != null)
 		{
 			collisionText = player.playerName;
+			team = player.playerTeam;
 		}
 		
-		this.body.setUserData(new CollisionInfo(collisionText, CollisionObjectType.car));
+		this.body.setUserData(new CollisionInfo(collisionText, CollisionObjectType.car, team));
 		
 		//initialize wheels
 		this.wheels = new ArrayList<Wheel>();

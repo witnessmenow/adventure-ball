@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -17,6 +18,7 @@ import com.garbri.proigo.core.collision.CollisionHelper;
 import com.garbri.proigo.core.controls.ScreenDebug;
 import com.garbri.proigo.core.objects.Ball;
 import com.garbri.proigo.core.objects.Pitch;
+import com.garbri.proigo.core.objects.Player.Team;
 import com.garbri.proigo.core.utilities.SpriteHelper;
 import com.garbri.proigo.core.utilities.TextDisplayHelper;
 import com.garbri.proigo.core.utilities.TimerHelper;
@@ -46,6 +48,8 @@ public class SoccerScreen extends ScreenDebug {
     private float worldWidth;
     private float worldHeight;
     private static int PIXELS_PER_METER = 10;      //how many pixels in a meter
+    
+    private Sound ownGoalSound;
 
     private Ball ball;
 
@@ -96,6 +100,8 @@ public class SoccerScreen extends ScreenDebug {
         this.pitchSprite = spriteHelper.getPitchSprite(screenWidth, screenHeight);
 
         this.vehicles = new ArrayList<Car>();
+        
+        this.ownGoalSound = Gdx.audio.newSound(Gdx.files.internal("Sound/Effects/ownGoal.mp3"));
     }
 
     @Override
@@ -140,12 +146,33 @@ public class SoccerScreen extends ScreenDebug {
 	                this.displayWinMessage = true;
 	                this.winMessage = "RED TEAM SCORED!!";
 	                this.redTeamScore++;
-	                this.timer.startCountDown(3);
+	                
+	                if (this.game.colHelper.lastCarToTouchBall.team == Team.blue)
+	                {
+	                	this.ownGoalSound.play(1.0f);
+	                	//Give sound enough time to finish
+	                	this.timer.startCountDown(4);
+	                }
+	                else
+	                {
+	                	this.timer.startCountDown(3);
+	                }
+	                
 	            } else if (this.pitch.rightGoal.checkForGoal(ballLocation, 0f)) {
 	                this.displayWinMessage = true;
 	                this.winMessage = "BLUE TEAM SCORED!!";
 	                this.blueTeamScore++;
-	                this.timer.startCountDown(3);
+	                
+	                if (this.game.colHelper.lastCarToTouchBall.team == Team.red)
+	                {
+	                	this.ownGoalSound.play(1.0f);
+	                	//Give sound enough time to finish
+	                	this.timer.startCountDown(4);
+	                }
+	                else
+	                {
+	                	this.timer.startCountDown(3);
+	                }
 	            }
 	        }
 	

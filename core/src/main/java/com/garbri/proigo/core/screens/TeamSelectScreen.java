@@ -202,11 +202,11 @@ public class TeamSelectScreen implements Screen{
 			
 			if(this.area.checkVehicleInBlue(vehicle))
 			{
-				this.game.players.get(i).playerTeam = Player.team.blue;
+				this.game.players.get(i).playerTeam = Player.Team.blue;
 			}
 			else
 			{
-				this.game.players.get(i).playerTeam = Player.team.red;
+				this.game.players.get(i).playerTeam = Player.Team.red;
 			}
 		}
 		

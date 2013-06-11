@@ -114,9 +114,9 @@ public class AdventureBall extends Game {
             tempPlayer.active = true;
 
             if (i % 2 == 0) {
-                tempPlayer.playerTeam = Player.team.blue;
+                tempPlayer.playerTeam = Player.Team.blue;
             } else {
-                tempPlayer.playerTeam = Player.team.red;
+                tempPlayer.playerTeam = Player.Team.red;
             }
 
             this.players.add(tempPlayer);
