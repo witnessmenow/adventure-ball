@@ -20,6 +20,7 @@ public class MusicHelper {
 		MusicHelper.stopMusicSafely(music);
 		music = Gdx.audio.newMusic(Gdx.files.internal(musicFile));
 		music.setLooping(true);
+		music.setVolume(0.2f);
 		music.play();
 		
 		return music;

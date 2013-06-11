@@ -239,7 +239,7 @@ public class TeamSelectScreen implements Screen{
 
         world = new World(new Vector2(0.0f, 0.0f), true);
         
-        world.setContactListener(new CollisionHelper());
+        world.setContactListener(this.game.colHelper);
         
         this.area = new TeamSelectArea(world, worldWidth, worldHeight, center);
 		

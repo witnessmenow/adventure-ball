@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
+import com.garbri.proigo.core.collision.CollisionHelper;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.KeyboardControls;
 import com.garbri.proigo.core.controls.OuyaListener;
@@ -55,6 +56,8 @@ public class AdventureBall extends Game {
     
     public MenuInputsHelper menuInputs;
     
+    public CollisionHelper colHelper;
+    
     public Music music;
     
     public boolean isOuya;
@@ -82,6 +85,8 @@ public class AdventureBall extends Game {
         }
         
         createPlayers(numPlayers);
+        
+        colHelper = new CollisionHelper(Gdx.audio.newSound(Gdx.files.internal("Sound/Effects/ballBounce.mp3")));        
         
         //Init Screens
         raceScreen = new RaceScreen(this);

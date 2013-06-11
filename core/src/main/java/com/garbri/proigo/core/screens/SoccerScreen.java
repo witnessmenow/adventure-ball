@@ -229,7 +229,7 @@ public class SoccerScreen extends ScreenDebug {
 
         world = new World(new Vector2(0.0f, 0.0f), true);
         
-        world.setContactListener(new CollisionHelper());
+        world.setContactListener(this.game.colHelper);
         
         this.pitch = new Pitch(world, worldWidth, worldHeight, center);
         this.ball = new Ball(world, center.x + this.ballOffsetX, center.y, spriteHelper.getBallSprite());

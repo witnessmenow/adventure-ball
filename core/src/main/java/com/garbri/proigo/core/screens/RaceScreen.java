@@ -295,7 +295,7 @@ private OrthographicCamera camera;
 		//Leaving this here since creating a new world everytime we load might not be a bad idea from a clean up perspictive
 		this.world = new World(new Vector2(0.0f, 0.0f), true);
 		
-		world.setContactListener(new CollisionHelper());
+		world.setContactListener(this.game.colHelper);
 		
 		this.maze = new Maze(world, worldWidth, worldHeight, center, 6);
 		this.ball = new Ball(world, center.x, center.y, spriteHelper.getBallSprite());
