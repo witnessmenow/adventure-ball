@@ -7,8 +7,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.garbri.proigo.core.collision.CollisionInfo;
+import com.garbri.proigo.core.collision.CollisionInfo.CollisionObjectType;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.objects.Player;
+import com.garbri.proigo.core.objects.Player.Team;
 import com.garbri.proigo.core.objects.Wheel;
 
 public class Car extends Vehicle {
@@ -54,6 +57,17 @@ public class Car extends Vehicle {
 		carShape.setAsBox(this.width / 2, this.length / 2);
 		fixtureDef.shape = carShape;
 		this.body.createFixture(fixtureDef);
+		
+		
+		String collisionText = "";
+		Team team = null;
+		if(player != null)
+		{
+			collisionText = player.playerName;
+			team = player.playerTeam;
+		}
+		
+		this.body.setUserData(new CollisionInfo(collisionText, CollisionObjectType.car, team));
 		
 		//initialize wheels
 		this.wheels = new ArrayList<Wheel>();

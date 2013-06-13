@@ -13,10 +13,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.garbri.proigo.core.AdventureBall;
+import com.garbri.proigo.core.collision.CollisionHelper;
 import com.garbri.proigo.core.controls.IControls;
 import com.garbri.proigo.core.controls.ScreenDebug;
 import com.garbri.proigo.core.objects.Ball;
 import com.garbri.proigo.core.objects.Maze;
+import com.garbri.proigo.core.objects.StartingPosition;
 import com.garbri.proigo.core.utilities.SpriteHelper;
 import com.garbri.proigo.core.utilities.TextDisplayHelper;
 import com.garbri.proigo.core.utilities.TimerHelper;
@@ -120,15 +122,19 @@ private OrthographicCamera camera;
 		Car tempCar;
 		
 		this.vehicles.clear();
+		spriteHelper.resetAvailableSprites();
+		this.maze.resetStartingPositions();
 		
 		for( int i = 0; i < this.game.players.size(); i++)
 		{
+			StartingPosition startingPos = this.maze.getPlayerStartingPosition(this.game.players.get(i).playerTeam);
+			
 			tempCar = new Car(	this.game.players.get(i).controls,
             					this.game.players.get(i), 
 								this.world, 
-								this.maze.getPlayerStartPoint(i), 
-								this.maze.getPlayerStartAngle(i),
-								spriteHelper.getTeamCarSprite(i, this.game.players.get(i).playerTeam),
+								startingPos.startingCoords, 
+								startingPos.startingAngle,
+								spriteHelper.getTeamCarSprite(this.game.players.get(i).playerTeam),
 								spriteHelper.getWheelSprite());
 			
 			this.vehicles.add(tempCar);
@@ -288,6 +294,9 @@ private OrthographicCamera camera;
 
 		//Leaving this here since creating a new world everytime we load might not be a bad idea from a clean up perspictive
 		this.world = new World(new Vector2(0.0f, 0.0f), true);
+		
+		world.setContactListener(this.game.colHelper);
+		
 		this.maze = new Maze(world, worldWidth, worldHeight, center, 6);
 		this.ball = new Ball(world, center.x, center.y, spriteHelper.getBallSprite());
 

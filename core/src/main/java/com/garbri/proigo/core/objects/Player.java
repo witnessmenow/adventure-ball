@@ -7,7 +7,7 @@ public class Player {
 	public IControls controls;
 	public String playerName;
 	public int playerId;
-	public team playerTeam;
+	public Team playerTeam;
 	public boolean active;
 	
 	public Player(String name, IControls controls, int id)
@@ -17,7 +17,7 @@ public class Player {
 		this.playerId = id;
 	}
 	
-	public static enum team{blue, red}
+	public static enum Team{blue, red}
 	
 	public String getTeamName()
 	{
@@ -36,11 +36,11 @@ public class Player {
 	{
 		if (this.playerId%2 == 0)
 		{
-			this.playerTeam = Player.team.blue;
+			this.playerTeam = Player.Team.blue;
 		}
 		else
 		{
-			this.playerTeam = Player.team.red;
+			this.playerTeam = Player.Team.red;
 		}
 	}
 

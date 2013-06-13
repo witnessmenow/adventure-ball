@@ -12,9 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.garbri.proigo.core.AdventureBall;
 import com.garbri.proigo.core.menu.MenuOptionConstants.pauseMenuOption;
 import com.garbri.proigo.core.menu.PauseMenuItem.optionType;
+import com.garbri.proigo.core.screens.TitleScreen;
 import com.garbri.proigo.core.utilities.SpriteHelper;
 
-public class PauseMenuOverlay {
+public class MenuOverlay {
 	
 	private AdventureBall game;
 	private BitmapFont optionsFont;
@@ -30,6 +31,8 @@ public class PauseMenuOverlay {
 	
 	public boolean pauseMenuActive;
 	
+	private SpriteHelper spriteHelper;
+	
 	private float movementCoolDown = 0f;
 	private float pauseCoolDown = 0f;
 	
@@ -40,15 +43,28 @@ public class PauseMenuOverlay {
 	private float menuOptionsX;
 	private float menuOptionsY;
 	
-	public PauseMenuOverlay (AdventureBall game, ArrayList<PauseMenuItem> menuItems)
+	private boolean creditsVisible;
+	private Sprite creditsBgSprite;
+	private Sprite creditsTextSprite;
+	
+	private boolean controlsVisible;
+	private Sprite controlsBgSprite;
+	private Sprite controlsImageSprite;
+	private Sprite controlsTextSprite;
+	
+	public MenuOverlay (AdventureBall game, ArrayList<PauseMenuItem> menuItems)
 	{
 		this.game = game;
+		
+		this.spriteHelper = new SpriteHelper();
 		
 		initializeFont();
 		
 		this.menuBackground = loadMenuSprite();
 		
 		this.menuItems = menuItems;
+		
+		creditsVisible = false;
 		
 		
 		
@@ -97,10 +113,60 @@ public class PauseMenuOverlay {
         {
         	this.movementCoolDown -= delta;
         }
-        processInputs();
+        
+        if(this.creditsVisible)
+        {
+        	this.creditsBgSprite.draw(spriteBatch);
+        	this.creditsTextSprite.draw(spriteBatch);
+        	
+        	if(this.movementCoolDown <= 0f)
+    		{
+        		if(checkForBackOrEnter())
+        		{
+        			closeCredits();
+        		}
+    		}
+        	
+        }
+        else if (this.controlsVisible)
+        {
+        	this.controlsBgSprite.draw(spriteBatch);
+        	this.controlsImageSprite.draw(spriteBatch);
+        	this.controlsTextSprite.draw(spriteBatch);
+        	
+        	if(this.movementCoolDown <= 0f)
+    		{
+        		if(checkForBackOrEnter())
+        		{
+        			closeControls();
+        		}
+    		}
+        }
+        else
+        {
+        	processInputs();
+        }
     
         
         
+	}
+	
+	private boolean checkForBackOrEnter()
+	{
+		return (this.game.menuInputs.escapePressed || this.game.menuInputs.enterPressed);
+	}
+	
+	private void closeCredits()
+	{
+
+		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
+		this.creditsVisible = false;
+	}
+	
+	private void closeControls()
+	{
+		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
+		this.controlsVisible = false;
 	}
 	
 	private void processInputs()
@@ -118,11 +184,14 @@ public class PauseMenuOverlay {
 	{
 		if(this.game.menuInputs.enterPressed)
         {
-			//Only intesrested in enters if it is a link type
-			if(this.menuItems.get(this.selectedOption).type == optionType.link)
-			{
-				handleLinks();
-			}
+			if(this.movementCoolDown <= 0f)
+        	{
+				//Only intesrested in enters if it is a link type
+				if(this.menuItems.get(this.selectedOption).type == optionType.link)
+				{
+					handleLinks();
+				}
+        	}
         }
         else if(this.game.menuInputs.escapePressed)
         {
@@ -214,7 +283,16 @@ public class PauseMenuOverlay {
 					break;
 				case sound:
 					configureSound();
-					break;				
+					break;
+				case credits:
+					showCredits();
+					break;
+				case exit:
+					exitGame();
+					break;
+				case start:
+					goToTeamSelect();
+					break;
 					
 			}
 		}
@@ -229,6 +307,18 @@ public class PauseMenuOverlay {
 		this.pauseCoolDownActive = true;
 	}
 	
+	private void showCredits()
+	{
+		creditsVisible = true;
+		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
+		
+		this.creditsBgSprite = this.spriteHelper.loadCreditsBgSprite();
+		this.creditsBgSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.creditsBgSprite);
+		
+		this.creditsTextSprite = this.spriteHelper.loadCreditsTextSprite();
+		this.creditsTextSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.creditsTextSprite);
+	}
+	
 	private void closeMenu()
 	{
 		this.pauseMenuActive  = false;
@@ -236,21 +326,47 @@ public class PauseMenuOverlay {
 		this.movementCoolDown =  MenuOptionConstants.slowDownTimer;
 	}
 	
+	public void activateCoolDown()
+	{
+		this.pauseCoolDown = MenuOptionConstants.slowDownTimer;
+		this.pauseCoolDownActive = true;
+	}
+	
 	private void quitToMenu()
 	{
 		closeMenu();
-		this.game.setScreen(this.game.mainMenu);
+		this.game.setScreen(this.game.titleScreen);
 	}
 	
 	private void goToTeamSelect()
 	{
 		closeMenu();
-		this.game.setScreen(this.game.controllerSelectScreen);
+		if(this.game.getScreen() != this.game.controllerSelectScreen)
+		{
+			this.game.setScreen(this.game.controllerSelectScreen);
+		}
+	}
+	
+	private void exitGame()
+	{
+		
+		//TODO: At some stage an are you sure prompt should be added
+		Gdx.app.exit();
 	}
 	
 	private void displayControls()
 	{
+		this.controlsVisible = true;
+		this.movementCoolDown = MenuOptionConstants.slowDownTimer;
 		
+		this.controlsBgSprite = this.spriteHelper.loadCreditsBgSprite();
+		this.controlsBgSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.controlsBgSprite);
+		
+		this.controlsImageSprite = this.spriteHelper.loadControllerSprite();
+		this.controlsImageSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.controlsImageSprite);
+		
+		this.controlsTextSprite = this.spriteHelper.loadOverlaySprite();
+		this.controlsTextSprite = this.spriteHelper.setPositionAdjusted(menuCenterX, menuCenterY, this.controlsTextSprite);
 	}
 	
 	private void configureSound()
@@ -275,6 +391,8 @@ public class PauseMenuOverlay {
 		this.pauseMenuActive = true;
 		this.movementCoolDown =  MenuOptionConstants.slowDownTimer;
 		this.selectedOption = 0;
+		
+		creditsVisible = false;
 	}
 	
 }

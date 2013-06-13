@@ -16,6 +16,9 @@ public class MenuOptionConstants
 	public static final String CONTROLS = "Controls";
 	public static final String QUIT = "Quit to Main Menu";
 	
+	public static final String START = "Start Game";
+	public static final String CREDITS = "Credits";
+	public static final String EXIT = "Exit Game";
 	
 	
 	//MAIN MENU OPTIONS
@@ -31,6 +34,6 @@ public class MenuOptionConstants
 	//Timer that needs to elapse between option movements
 	public static final float slowDownTimer = 0.2f;
 	
-	public static enum pauseMenuOption{resume, sound, teamSelect, controls, quit}
+	public static enum pauseMenuOption{resume, sound, teamSelect, controls, quit, credits, start, exit}
 
 }

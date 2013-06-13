@@ -38,7 +38,7 @@ public class Pitch {
 	    BoxProp wall444 = new BoxProp(world, 1, touchlineLength, new Vector2 (worldWidth - (rightGoal.getGoalDepth()), worldHeight-(touchlineLength/2)));//right 
 	}
 	
-	public Vector2 getTeamStartPoint(Player.team team, int playerNumber)
+	public Vector2 getTeamStartPoint(Player.Team team, int playerNumber)
 	{
 		//We may use playerNumber in the future
 		
@@ -54,7 +54,7 @@ public class Pitch {
 		return center;
 	}
 	
-	public float getTeamStartAngle(Player.team team)
+	public float getTeamStartAngle(Player.Team team)
 	{
 		switch(team)
 		{
