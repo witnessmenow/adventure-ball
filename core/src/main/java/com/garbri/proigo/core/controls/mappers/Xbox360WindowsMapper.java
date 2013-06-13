@@ -22,5 +22,8 @@ public class Xbox360WindowsMapper
 	
 	public static final int LEFT_ANALOG_X = 1;
 	public static final int LEFT_ANALOG_Y = 0;
+	
+	//Dpad arrows
+	public static final int DPAD_ARROWS = 0;
 
 }

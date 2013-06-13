@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
-import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.math.Vector3;
 import com.garbri.proigo.core.controls.mappers.Xbox360WindowsMapper;
 
@@ -129,6 +128,47 @@ public class XboxListener implements ControllerListener {
 
 		if(debugLogging)
 			Gdx.app.log("XboxListener-DEBUG", "POV moved: arg1=" + String.valueOf(arg1) + " arg2=" + String.valueOf(arg2));
+		
+		if(arg1 == Xbox360WindowsMapper.DPAD_ARROWS){
+			if(arg2.equals(PovDirection.east)){
+				controls.dpadRight = true;
+				controls.dpadLeft = false;
+			} else if (arg2.equals(PovDirection.north)){
+				controls.dpadUp = true;
+				controls.dpadDown = false;
+			} else if (arg2.equals(PovDirection.south)){
+				controls.dpadDown = true;
+				controls.dpadUp = false;
+			} else if (arg2.equals(PovDirection.west)){
+				controls.dpadLeft = true;
+				controls.dpadRight = false;
+			} else if (arg2.equals(PovDirection.northEast)){
+				controls.dpadUp = true;
+				controls.dpadDown = true;
+				controls.dpadLeft = false;
+				controls.dpadRight = false;
+			} else if (arg2.equals(PovDirection.northWest)){
+				controls.dpadUp = true;
+				controls.dpadLeft = true;
+				controls.dpadDown = false;
+				controls.dpadRight = false;
+			} else if (arg2.equals(PovDirection.southEast)){
+				controls.dpadDown = true;
+				controls.dpadRight = true;
+				controls.dpadLeft = false;
+				controls.dpadUp = false;
+			} else if (arg2.equals(PovDirection.southWest)){
+				controls.dpadDown = true;
+				controls.dpadLeft = true;
+				controls.dpadUp = false;
+				controls.dpadRight = false;
+			} else if (arg2.equals(PovDirection.center)){
+				controls.dpadLeft = false;
+				controls.dpadRight = false;
+				controls.dpadUp = false;
+				controls.dpadDown = false;
+			}
+		}
 		
 		return false;
 	}

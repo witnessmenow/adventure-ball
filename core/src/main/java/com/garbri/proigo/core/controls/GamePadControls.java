@@ -14,6 +14,11 @@ public class GamePadControls implements IControls{
 	
 	Boolean leftBumper = false;
 	
+	Boolean dpadLeft = false;
+	Boolean dpadRight = false;
+	Boolean dpadUp = false;
+	Boolean dpadDown = false;
+	
 	public Boolean getRightBumper() {
 		return rightBumper;
 	}
@@ -69,6 +74,30 @@ public class GamePadControls implements IControls{
 	}
 	public void setAccelerate(Boolean accelerate) {
 		this.accelerate = accelerate;
+	}
+	public Boolean getDpadLeft() {
+		return dpadLeft;
+	}
+	public void setDpadLeft(Boolean dpadLeft) {
+		this.dpadLeft = dpadLeft;
+	}
+	public Boolean getDpadRight() {
+		return dpadRight;
+	}
+	public void setDpadRight(Boolean dpadRight) {
+		this.dpadRight = dpadRight;
+	}
+	public Boolean getDpadUp() {
+		return dpadUp;
+	}
+	public void setDpadUp(Boolean dpadUp) {
+		this.dpadUp = dpadUp;
+	}
+	public Boolean getDpadDown() {
+		return dpadDown;
+	}
+	public void setDpadDown(Boolean dpadDown) {
+		this.dpadDown = dpadDown;
 	}
 
 }

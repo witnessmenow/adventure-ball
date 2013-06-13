@@ -53,9 +53,9 @@ public class MenuInputsHelper {
 	private void ControlPadRead(GamePadControls gamePadControls)
 	{
 		//Read Up/Down
-		if (gamePadControls.getUp())
+		if (gamePadControls.getUp() || gamePadControls.getDpadUp())
 			this.upPressed = true;
-		else if (gamePadControls.getDown())
+		else if (gamePadControls.getDown() || gamePadControls.getDpadDown())
 			this.downPressed = true;
 		
 		// Read enter/escape
@@ -65,6 +65,7 @@ public class MenuInputsHelper {
 		{
 			Gdx.app.log("MenuInputsHelper", "Start is pressed");
 			this.escapePressed = true;
+			gamePadControls.setStart(false);
 		}
 
 	}

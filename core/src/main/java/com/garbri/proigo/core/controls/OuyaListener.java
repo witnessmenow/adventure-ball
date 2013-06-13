@@ -108,7 +108,7 @@ public class OuyaListener implements ControllerListener{
 		{
 			controls.brake = false;
 		}
-		else if (buttonCode == startButton|| buttonCode == 108)
+		else if (buttonCode == 108)
 		{
 			controls.start = false;
 			Gdx.app.log("OuyaListener", "Start Button is up");

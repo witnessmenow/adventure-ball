@@ -66,9 +66,9 @@ public class Vehicle {
 			this.accelerate = Vehicle.ACC_NONE;
 		
 		// Read Stearing Command
-		if (gamePadControls.getLeft())
+		if (gamePadControls.getLeft() || gamePadControls.getDpadLeft())
 			this.steer = Vehicle.STEER_LEFT;
-		else if (gamePadControls.getRight())
+		else if (gamePadControls.getRight() || gamePadControls.getDpadRight())
 			this.steer = Vehicle.STEER_RIGHT;
 		else
 			this.steer = Vehicle.STEER_NONE;
